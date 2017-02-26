@@ -1,0 +1,29 @@
+{
+  "name": "fed-bootcamp",
+  "version": "1.0.0",
+  "description": "Create - Front End Development Bootcamp",
+  "scripts": {
+    "lintjs": "eslint .",
+    "lintmd": "check-all-markdown"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CreateBootcamp/fed-bootcamp.git"
+  },
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/CreateBootcamp/fed-bootcamp/issues"
+  },
+  "homepage": "https://github.com/CreateBootcamp/fed-bootcamp#readme",
+  "private": true,
+  "devDependencies": {
+    "babel-eslint": "7.1.1",
+    "check-all-markdown": "1.2.4",
+    "eslint": "3.15.0",
+    "eslint-plugin-babel": "4.0.1",
+    "eslint-plugin-html": "2.0.0",
+    "eslint-plugin-promise": "3.4.0",
+    "eslint-plugin-react": "6.9.0",
+    "markdownlint-cli": "0.2.0"
+  }
+}
