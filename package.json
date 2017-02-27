@@ -25,5 +25,8 @@
     "eslint-plugin-promise": "3.4.0",
     "eslint-plugin-react": "6.9.0",
     "markdownlint-cli": "0.2.0"
+  },
+  "dependencies": {
+    "bootstrap": "3.3.7"
   }
 }

@@ -15,7 +15,8 @@ html {
 html,
 body {
   font: 100% 'Source Sans Pro', sans-serif;
-  overflow: auto;
+  height: 100%;
+  /*overflow: auto;*/
 }
 
 h1 {
@@ -41,14 +42,15 @@ h4 {
 
 /*Navigation*/
 
-.navbar-header {
+.navbar.navbar-default {
   position: relative;
+  width: 1440px;
 }
 
 .navbar-brand img {
   position: absolute;
   top: 5px;
-  left: 0;
+  left: 15px;
 }
 
 /*fixing ul navbar mediaquery*/
@@ -64,27 +66,85 @@ h4 {
   margin-right: 45px;
 }
 
-.panel-body ul {
-  padding-left: 20px;
-}
-
 .panel-default {
-  width: 250px;
+  height: 100%; /* default bootstrap height goes beyond the list height so needs to be set manually */
+}
+.panel.panel-default {
+  height: 100%; /* default bootstrap height goes beyond the list height so needs to be set manually */
 }
 
 body > main > div > div {
-  margin-right: 50px;
+  margin-right: 20px; /* List Spacing */
+}
+
+.panel-body ul {
+  padding-left: 0; /* default padding of ul interrupts flex center option so reseted to 0 */
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 250px;
+  max-height: 64vh;
+  /*height: 400px; putting height will disable the effect of the li height setting the height of the ul */
 }
 
 .panel-body li {
   list-style: none;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  background-color: #33CC99;
+  width: 200px;
+  box-shadow: 7px 5px 37px -5px #2c9994 inset;
 }
 
+.panel-heading {
+  font-weight: 600;
+}
 .wrapper {
+  /*position: relative;*/
   display: -webkit-flex;
-  display: flex;
-  flex-flow: row;
+  display: inline-flex;
+}
+body > main > div > div > div.panel-footer > a {     /* add a card link */
+  color: black;
+  text-decoration: none
+}
+
+.btn {
+  margin-top: 1px;
+  align-self: flex-start;
+  background-color: rgba(20, 183, 201, .4);
+  width: 220px;
+  height: 40px;
+  text-align: left;
+  color: #1b6d85;
+  font-weight: bold;
+  box-shadow: 2px 2px 20px -5px #2c9994 inset;
 }
 
 
+
+
+@media (max-height: 420px) {
+  .panel-body ul {
+    max-height: 50vh;
+    /*height: 400px; putting height will disable the effect of the li height setting the height of the ul */
+  }
+}
+
+@media (min-width: 0) {
+
+  .navbar-nav > li {         /* Effects the problem regarding the float under 768px, fixes that. */
+    float: left;
+  }
+
+  .navbar-nav > li > a {     /* Effects the box around the board selected box so it will be the same as above 768px. */
+    float: left;
+    padding: 15px;
+  }
+  .nav.navbar-nav {          /* Effects the board and members under 768px, gets them inline. */
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+}
 
