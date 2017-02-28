@@ -16,7 +16,9 @@ html,
 body {
   font: 100% 'Source Sans Pro', sans-serif;
   height: 100%;
+  width: 100%;
   /*overflow: auto;*/
+  background-color: #1b6d85;
 }
 
 h1 {
@@ -42,9 +44,15 @@ h4 {
 
 /*Navigation*/
 
+main {
+  padding-top: 70px;
+}
+
 .navbar.navbar-default {
-  position: relative;
-  width: 1440px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 
 .navbar-brand img {
@@ -66,11 +74,16 @@ h4 {
   margin-right: 45px;
 }
 
+/*Main*/
+
 .panel-default {
   height: 100%; /* default bootstrap height goes beyond the list height so needs to be set manually */
 }
 .panel.panel-default {
   height: 100%; /* default bootstrap height goes beyond the list height so needs to be set manually */
+  margin-left: 5px;
+  overflow: auto;
+  background-color: darkslategrey;
 }
 
 body > main > div > div {
@@ -79,22 +92,30 @@ body > main > div > div {
 
 .panel-body ul {
   padding-left: 0; /* default padding of ul interrupts flex center option so reseted to 0 */
-  overflow: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   width: 250px;
-  max-height: 64vh;
+  /*max-height: 66vh;*/
   /*height: 400px; putting height will disable the effect of the li height setting the height of the ul */
+}
+
+.panel-body {
+  background-color: darkslategrey;
+  padding-bottom: 0;
+  overflow: auto;
+  max-height: 66vh;
 }
 
 .panel-body li {
   list-style: none;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  background-color: #33CC99;
-  width: 200px;
-  box-shadow: 7px 5px 37px -5px #2c9994 inset;
+  padding: 5px;
+  margin-top: 10px;
+  /*margin-bottom: 10px;*/
+  background-color: aquamarine;
+  width: 250px;
+  box-shadow: 2px 2px 20px -5px black inset;
+  border-radius: 10px;
 }
 
 .panel-heading {
@@ -105,15 +126,18 @@ body > main > div > div {
   display: -webkit-flex;
   display: inline-flex;
 }
-body > main > div > div > div.panel-footer > a {     /* add a card link */
+
+body > main > div > div > div.panel-footer > button {     /* add a card link */
   color: black;
-  text-decoration: none
+  text-decoration: none;
+  border: none;
+  background-color: transparent;
 }
 
 .btn {
   margin-top: 1px;
   align-self: flex-start;
-  background-color: rgba(20, 183, 201, .4);
+  background-color: rgba(20, 283, 201, .4);
   width: 220px;
   height: 40px;
   text-align: left;
@@ -122,8 +146,12 @@ body > main > div > div > div.panel-footer > a {     /* add a card link */
   box-shadow: 2px 2px 20px -5px #2c9994 inset;
 }
 
-
-
+.panel-footer {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
 
 @media (max-height: 420px) {
   .panel-body ul {
@@ -134,15 +162,16 @@ body > main > div > div > div.panel-footer > a {     /* add a card link */
 
 @media (min-width: 0) {
 
-  .navbar-nav > li {         /* Effects the problem regarding the float under 768px, fixes that. */
+  /* Effects the problem regarding the float under 768px, fixes that. */
+  .navbar-nav > li {
     float: left;
   }
-
-  .navbar-nav > li > a {     /* Effects the box around the board selected box so it will be the same as above 768px. */
-    float: left;
+  /* Effects the box around the board selected box so it will be the same as above 768px. */
+  .navbar-nav > li > a {
     padding: 15px;
   }
-  .nav.navbar-nav {          /* Effects the board and members under 768px, gets them inline. */
+  /* Effects the board and members under 768px, gets them inline. */
+  .nav.navbar-nav {
     margin-bottom: 0;
     margin-top: 0;
   }
