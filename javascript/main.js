@@ -2,6 +2,22 @@
  * Created by Guy on 27/02/2017.
  */
 
+// initializing new lists and using handleListTitle to change the title names of the old lists.
+
+function initOldLists() {
+  let oldListSpans = document.querySelectorAll('.list-title');
+  console.log(oldListSpans);
+
+  for (const span of oldListSpans) {
+    console.log(span);
+    handleListTitle(span);
+  }
+}
+
+
+initOldLists();
+
+
 // creating new list
 
 let listButton = document.getElementById('add-list');
@@ -16,53 +32,11 @@ listButton.addEventListener('click', (event) => {
   divParent.className = "panel panel-default";
   let divHeading = document.createElement('div');
   divHeading.className = "panel-heading";
+
   divHeading.innerHTML = '<span id="dynamicSpan">' + 'New List' + '</span>';
-  let newListSpan = divHeading.querySelector('#dynamicSpan');
+
+  let newListSpan = divHeading.querySelector('#dynamicSpan');  // New lists span
   console.log(newListSpan);
-
-  // event listeners
-
-  newListSpan.addEventListener('click', (e) => {
-    const span = e.target;
-    span.style.display = 'none';
-    let text = span.innerHTML;
-    let input = document.createElement("input");
-    input.type = "text";
-    input.size = Math.max(text.length / 4 * 3, 4);
-    span.parentNode.insertBefore(input, span);
-    input.focus();
-    input.addEventListener('blur', (e) => {
-
-    });
-
-    input.addEventListener('keyup', (e) => {
-
-      // get the input new value, set this value to the span, remove the input, show the span.
-
-      // Remove the input
-      const ENTER = 13;
-      if (e.keyCode === ENTER) {
-        if (input.value.trim() !== '') {
-          const input = e.target;
-          let inputText = input.value;
-          console.log(inputText);
-          // const divHeading = input.parentNode;
-          // let updateSpan = divHeading.querySelector('span');
-
-          // Update the span
-          span.innerHTML = input.value;
-          input.parentNode.removeChild(input);
-
-          // Show the e again
-          span.style.display = "";
-        }
-        else {
-          input.parentNode.removeChild(input);
-          span.style.display = "";
-        }
-      }
-    });
-  });
 
   let divFooter = document.createElement('div');
   divFooter.className = "panel-footer";
@@ -71,12 +45,7 @@ listButton.addEventListener('click', (event) => {
   divBody.className = "panel-body";
 
   let mainUl = document.createElement('ul');
-  let li = document.createElement('li');
 
-  let text = document.createTextNode('here we go'); //example text just so something will sit inside the li
-  li.appendChild(text);
-
-  mainUl.appendChild(li);
 
   console.log(mainUl);
 
@@ -86,6 +55,8 @@ listButton.addEventListener('click', (event) => {
   divParent.appendChild(divFooter);
 
   console.log(divParent);
+
+  handleListTitle(divHeading);
 
   // adding new  add card button to a new list
 
@@ -100,6 +71,57 @@ listButton.addEventListener('click', (event) => {
   // parentNode.insertBefore(newNode, referenceNode) example for how to use insertBefore node that been used below;
   divWrapper.insertBefore(divParent, listButton);
 });
+
+// event listeners on title function
+
+function handleListTitle(titleElm) {
+  titleElm.addEventListener('click', (e) => {
+    const span = e.target;
+    span.style.display = 'none';
+    let text = span.innerHTML;
+    let input = document.createElement("input");
+    input.type = "text";
+    input.value = span.innerHTML;
+    input.size = Math.max(text.length / 4 * 3, 4);
+    span.parentNode.insertBefore(input, span);
+    input.focus();
+
+    input.addEventListener('blur', (e) => {
+      const input = e.target;
+      let inputText = input.value;
+      if (input.value.trim() !== '') {
+        console.log(inputText);
+        // const divHeading = input.parentNode;
+        // let updateSpan = divHeading.querySelector('span');
+
+        // Update the span
+        span.innerHTML = input.value;
+        input.parentNode.removeChild(input);
+
+        // Show the e again
+        span.style.display = "";
+      }
+      else {
+        input.parentNode.removeChild(input);
+        span.style.display = "";
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+
+      // get the input new value, set this value to the span, remove the input, show the span.
+
+      // Remove the input
+      const ENTER = 13;
+      const input = e.target;
+      let inputText = input.value;
+      if (e.keyCode === ENTER) {
+        e.target.blur();
+      }
+    });
+  });
+}
+
 
 // creating a new note
 
