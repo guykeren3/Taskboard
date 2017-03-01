@@ -21,9 +21,9 @@ initOldLists();
 
 const listTemplate = `
   <div class="panel-heading"> <span class="list-title"> New List </span> </div>
-  <div class="arrow-down-box">
+  <div class="dropdown">
     <div class="arrow-down"></div>
-    <ul class="submenu-list">
+    <ul class="dropdown-menu">
       <li><span>Delete List</span></li>
     </ul>
   </div>
@@ -54,7 +54,7 @@ function createList() {
   handleListTitle(newListSpan);
 
   // Handle list options button
-  let listOptions = listParent.querySelector('.arrow-down-box');
+  let listOptions = listParent.querySelector('.dropdown');
   makeButtonSupportRemoveList(listOptions);
 
   // Handle clicks on Add Card
@@ -147,7 +147,7 @@ function handleListTitle(titleElm) {
 
 // catch all the arrow buttons (divs)
 
-let subMenuButtons = document.querySelectorAll('.arrow-down-box');
+let subMenuButtons = document.querySelectorAll('.dropdown');
 console.info(subMenuButtons);
 
 // apply event listener to every arrow button
@@ -160,7 +160,7 @@ for (const button of subMenuButtons) {
 
 function makeButtonSupportRemoveList(button) {
 
-  let ulInsideButton = button.querySelector('.submenu-list');
+  let ulInsideButton = button.querySelector('.dropdown-menu');
   console.info(ulInsideButton);
   ulInsideButton.style.display = 'none';
 

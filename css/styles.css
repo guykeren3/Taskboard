@@ -83,7 +83,6 @@ main {
 .panel.panel-default {
   height: 100%; /* default bootstrap height goes beyond the list height so needs to be set manually */
   margin-left: 5px;
-  overflow: auto;
   position: relative;
   /* position for the arrow button so the absolute will stick to it /*
    /*background-color: darkslategrey;*/
@@ -138,7 +137,7 @@ body > main > div > div > div.panel-footer > button { /* add a card link */
   background-color: transparent;
 }
 
-.btn {
+.add-list-btn {
   margin-top: 1px;
   align-self: flex-start;
   background-color: rgba(20, 183, 251, .4);
@@ -159,15 +158,12 @@ body > main > div > div > div.panel-footer > button { /* add a card link */
 
 /*arrow*/
 
-.arrow-down-box {
+.dropdown {
   width: 30px;
   height: 30px;
   position: absolute;
   top: 4px;
   right: 5px;
-  border: 15px solid lightgrey;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .arrow-down {
@@ -182,36 +178,36 @@ body > main > div > div > div.panel-footer > button { /* add a card link */
   cursor: pointer;
 }
 
-.submenu-list {
-  height: 50px;
-  width: 200px;
-  display: flex;
-  background-color: white;
-  border: 1px solid darkgrey;
-  border-radius: 7px;
-  font-weight: 600;
-  position: absolute;
-  top: 22px;
-  right: -18px;
-  padding-left: 0;
-}
+/*.dropdown-menu {*/
+  /*height: 50px;*/
+  /*width: 200px;*/
+  /*display: flex;*/
+  /*background-color: white;*/
+  /*border: 1px solid darkgrey;*/
+  /*border-radius: 7px;*/
+  /*font-weight: 600;*/
+  /*position: absolute;*/
+  /*top: 22px;*/
+  /*right: -18px;*/
+  /*padding-left: 0;*/
+/*}*/
 
-.submenu-list li {
-  list-style: none;
-  line-height: 50px; /* centers the li in the ul */
-  height: 50px;
-}
+/*.dropdown-menu li {*/
+  /*list-style: none;*/
+  /*line-height: 50px; !* centers the li in the ul *!*/
+  /*height: 50px;*/
+/*}*/
 
-.submenu-list li:hover {
-  display: inline-block;
-  /*line-height: 30px;*/
-  /*height: 30px;*/
-  width: 200px;
-  /*padding-left: 20px;*/
-  background-color: rgba(156, 145, 145, .1);
-}
+/*.dropdown-menu li:hover {*/
+  /*display: inline-block;*/
+  /*!*line-height: 30px;*!*/
+  /*!*height: 30px;*!*/
+  /*width: 200px;*/
+  /*!*padding-left: 20px;*!*/
+  /*background-color: rgba(156, 145, 145, .1);*/
+/*}*/
 
-/*.submenu-list span:hover {*/
+/*.dropdown-menu span:hover {*/
   /*background-color: rgba(156, 145, 145, .1);*/
   /*!*height: 25px;*!*/
   /*width: 200px;*/
