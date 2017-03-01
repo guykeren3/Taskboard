@@ -18,7 +18,7 @@ body {
   height: 100%;
   width: 100%;
   /*overflow: auto;*/
-  background-color: #1b6d85;
+  /*background-color: #1b6d85;*/
 }
 
 h1 {
@@ -64,10 +64,10 @@ main {
 /*fixing ul navbar mediaquery*/
 
 /*@media (max-width: 768px) {*/
-  /*.navbar-nav {*/
-    /*float: left;*/
-    /*margin: 0;*/
-  /*}*/
+/*.navbar-nav {*/
+/*float: left;*/
+/*margin: 0;*/
+/*}*/
 /*}*/
 
 .navbar-brand {
@@ -79,11 +79,14 @@ main {
 .panel-default {
   height: 100%; /* default bootstrap height goes beyond the list height so needs to be set manually */
 }
+
 .panel.panel-default {
   height: 100%; /* default bootstrap height goes beyond the list height so needs to be set manually */
   margin-left: 5px;
   overflow: auto;
-  background-color: darkslategrey;
+  position: relative;
+  /* position for the arrow button so the absolute will stick to it /*
+   /*background-color: darkslategrey;*/
 }
 
 body > main > div > div {
@@ -101,7 +104,7 @@ body > main > div > div {
 }
 
 .panel-body {
-  background-color: darkslategrey;
+  /*background-color: darkslategrey;*/
   padding-bottom: 0;
   overflow: auto;
   max-height: 66vh;
@@ -115,19 +118,20 @@ body > main > div > div {
   background-color: aquamarine;
   width: 250px;
   box-shadow: 2px 2px 20px -5px black inset;
-  border-radius: 10px;
+  /*border-radius: 10px;*/
 }
 
 .panel-heading {
   font-weight: 600;
 }
+
 .wrapper {
   /*position: relative;*/
   display: -webkit-flex;
   display: inline-flex;
 }
 
-body > main > div > div > div.panel-footer > button {     /* add a card link */
+body > main > div > div > div.panel-footer > button { /* add a card link */
   color: black;
   text-decoration: none;
   border: none;
@@ -137,13 +141,13 @@ body > main > div > div > div.panel-footer > button {     /* add a card link */
 .btn {
   margin-top: 1px;
   align-self: flex-start;
-  background-color: rgba(20, 283, 201, .4);
+  background-color: rgba(20, 183, 251, .4);
   width: 220px;
   height: 40px;
   text-align: left;
   color: #1b6d85;
   font-weight: bold;
-  box-shadow: 2px 2px 20px -5px #2c9994 inset;
+  box-shadow: 2px 2px 10px -5px #2c9994 inset;
 }
 
 .panel-footer {
@@ -152,6 +156,66 @@ body > main > div > div > div.panel-footer > button {     /* add a card link */
   left: 0;
   z-index: 10;
 }
+
+/*arrow*/
+
+.arrow-down-box {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  border: 15px solid lightgrey;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  position: absolute;
+  top: -2px;
+  right: -7px;
+  border-top: 7px solid black;
+  cursor: pointer;
+}
+
+.submenu-list {
+  height: 50px;
+  width: 200px;
+  display: flex;
+  background-color: white;
+  border: 1px solid darkgrey;
+  border-radius: 7px;
+  font-weight: 600;
+  position: absolute;
+  top: 22px;
+  right: -18px;
+  padding-left: 0;
+}
+
+.submenu-list li {
+  list-style: none;
+  line-height: 50px; /* centers the li in the ul */
+  height: 50px;
+}
+
+.submenu-list li:hover {
+  display: inline-block;
+  /*line-height: 30px;*/
+  /*height: 30px;*/
+  width: 200px;
+  /*padding-left: 20px;*/
+  background-color: rgba(156, 145, 145, .1);
+}
+
+/*.submenu-list span:hover {*/
+  /*background-color: rgba(156, 145, 145, .1);*/
+  /*!*height: 25px;*!*/
+  /*width: 200px;*/
+/*}*/
 
 @media (max-height: 420px) {
   .panel-body ul {
@@ -166,10 +230,12 @@ body > main > div > div > div.panel-footer > button {     /* add a card link */
   .navbar-nav > li {
     float: left;
   }
+
   /* Effects the box around the board selected box so it will be the same as above 768px. */
   .navbar-nav > li > a {
     padding: 15px;
   }
+
   /* Effects the board and members under 768px, gets them inline. */
   .nav.navbar-nav {
     margin-bottom: 0;

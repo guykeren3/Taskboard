@@ -6,71 +6,91 @@
 
 function initOldLists() {
   let oldListSpans = document.querySelectorAll('.list-title');
-  console.log(oldListSpans);
+  // console.log(oldListSpans);
 
   for (const span of oldListSpans) {
-    console.log(span);
+    // console.log(span);
     handleListTitle(span);
+  }
+  addListenerToButtons();
+}
+
+initOldLists();
+
+// creating new list
+
+const listTemplate = `
+  <div class="panel-heading"> <span class="list-title"> New List </span> </div>
+  <div class="arrow-down-box">
+    <div class="arrow-down"></div>
+    <ul class="submenu-list">
+      <li><span>Delete List</span></li>
+    </ul>
+  </div>
+  <div class="panel-body">
+  <ul class="list-container">
+  </ul>
+  </div>
+  <div class="panel-footer"><button class="add-card-button">Add a card</button></div>
+`;
+
+let addListButton = document.querySelector('#add-list');
+
+function createList() {
+//catching the main div to push the other divs into it
+  const listParent = document.createElement('div');
+  listParent.className = 'panel panel-default';
+  listParent.innerHTML = listTemplate;
+
+  let divWrapper = document.querySelector('.wrapper');
+
+// parentNode.insertBefore(newNode, referenceNode) example for how to use insertBefore node that been used below;
+
+  divWrapper.insertBefore(listParent, addListButton);
+
+  // Handle clicks on list title
+  let newListSpan = listParent.querySelector('.list-title');
+  // console.info(newListSpan);
+  handleListTitle(newListSpan);
+
+  // Handle list options button
+  let listOptions = listParent.querySelector('.arrow-down-box');
+  makeButtonSupportRemoveList(listOptions);
+
+  // Handle clicks on Add Card
+  let cardButton = listParent.querySelector('.add-card-button');
+  cardButton.addEventListener('click', newCard);
+  // console.log(cardButton);
+}
+
+addListButton.addEventListener('click', (e) => {
+  createList();
+});
+
+function addListenerToButtons() {
+  let cardButtonString = document.querySelectorAll('.add-card-button');
+  // console.log(cardButtonString);
+
+  for (const button of cardButtonString) {
+    button.addEventListener('click', newCard);
+    // console.info('should see a button', button);
   }
 }
 
 
-initOldLists();
-
-
-// creating new list
-
-let listButton = document.getElementById('add-list');
-
-listButton.addEventListener('click', (event) => {
-
+function newCard(event) {
   const target = event.target;
-
-  console.log('I was clicked', target);
-
-  let divParent = document.createElement('div');
-  divParent.className = "panel panel-default";
-  let divHeading = document.createElement('div');
-  divHeading.className = "panel-heading";
-
-  divHeading.innerHTML = '<span id="dynamicSpan">' + 'New List' + '</span>';
-
-  let newListSpan = divHeading.querySelector('#dynamicSpan');  // New lists span
-  console.log(newListSpan);
-
-  let divFooter = document.createElement('div');
-  divFooter.className = "panel-footer";
-  // divFooter.textContent = 'New List';
-  let divBody = document.createElement('div');
-  divBody.className = "panel-body";
-
-  let mainUl = document.createElement('ul');
-
-
-  console.log(mainUl);
-
-  divBody.appendChild(mainUl);
-  divParent.appendChild(divHeading);
-  divParent.appendChild(divBody);
-  divParent.appendChild(divFooter);
-
-  console.log(divParent);
-
-  handleListTitle(divHeading);
-
-  // adding new  add card button to a new list
-
-  let addCardButton = document.querySelector('.anchor-adjustment');
-  divFooter.appendChild(addCardButton);
-
-  //catching the main div to push the other divs into it
-
-  let divWrapper = document.querySelector('.wrapper');
-  let listButton = document.querySelector('#add-list');
-
-  // parentNode.insertBefore(newNode, referenceNode) example for how to use insertBefore node that been used below;
-  divWrapper.insertBefore(divParent, listButton);
-});
+  let divFooter = target.parentNode;
+  // console.log(divFooter);
+  let divParent = divFooter.parentNode;
+  // console.log(divParent);
+  let divUl = divParent.querySelector('.list-container');
+  // console.log(divUl);
+  let newLi = document.createElement('li');
+  newLi.textContent = 'example string just so the li wont be so thin'; // adding an example string.
+  // console.log(newLi);
+  divUl.appendChild(newLi);
+}
 
 // event listeners on title function
 
@@ -90,7 +110,7 @@ function handleListTitle(titleElm) {
       const input = e.target;
       let inputText = input.value;
       if (input.value.trim() !== '') {
-        console.log(inputText);
+        // console.log(inputText);
         // const divHeading = input.parentNode;
         // let updateSpan = divHeading.querySelector('span');
 
@@ -122,26 +142,57 @@ function handleListTitle(titleElm) {
   });
 }
 
+// delete section
 
-// creating a new note
 
-let cardButtonString = document.querySelectorAll('.anchor-adjustment');
-console.log(cardButtonString);
+// catch all the arrow buttons (divs)
 
-for (const button of cardButtonString) {
-  button.addEventListener('click', (event) => {
-    const target = event.target;
-    console.log('i was clicked', target);
-    let divFooter = target.parentNode;
-    console.log(divFooter);
-    let divParent = divFooter.parentNode;
-    console.log(divParent);
-    let divUl = divParent.querySelector('ul');
-    console.log(divUl);
-    let newLi = document.createElement('li');
-    newLi.textContent = 'example string just so the li wont be so thin'; // adding an example string.
-    console.log(newLi);
-    divUl.appendChild(newLi);
+let subMenuButtons = document.querySelectorAll('.arrow-down-box');
+console.info(subMenuButtons);
+
+// apply event listener to every arrow button
+
+for (const button of subMenuButtons) {
+  // console.info(button);
+  // putting display = none on all the button list to initialize it
+  makeButtonSupportRemoveList(button)
+}
+
+function makeButtonSupportRemoveList(button) {
+
+  let ulInsideButton = button.querySelector('.submenu-list');
+  console.info(ulInsideButton);
+  ulInsideButton.style.display = 'none';
+
+  button.addEventListener('click', (e) => {
+    const button = e.target;
+    console.info(button);
+// clicking on the arrow button turns the display ul to = block
+    if (ulInsideButton.style.display === 'none') {
+      ulInsideButton.style.display = 'block';
+    }
+    else {
+      ulInsideButton.style.display = 'none';
+    }
   });
+
+  let liInsideUlOfButtons = ulInsideButton.querySelector('li');
+  liInsideUlOfButtons.addEventListener('click', (e) => {
+    const li = e.target;
+    let divPanelPanelDefault = li.closest('.panel.panel-default');
+    console.info(divPanelPanelDefault);
+    let headerSpan = divPanelPanelDefault.querySelector('.panel-heading > span');
+    console.info(headerSpan);
+    let headerSpanText = headerSpan.textContent;
+    // let divHeader = divPanelPanelDefault.querySelector('span');
+    // console.info(divHeader);
+    let result = window.confirm(`Deleting ${headerSpanText} list. Are you sure?`);
+    if (result === true) {
+      divPanelPanelDefault.parentNode.removeChild(divPanelPanelDefault);
+    }
+    else {
+      ulInsideButton.style.display = 'none';
+    }
+  })
 }
 
