@@ -111,13 +111,14 @@ body > main > div > div {
 
 .panel-body li {
   list-style: none;
-  padding: 5px;
+  padding: 5px 5px 50px 5px;
   margin-top: 10px;
   /*margin-bottom: 10px;*/
-  background-color: aquamarine;
+  /*background-color: aquamarine;*/
   width: 250px;
-  box-shadow: 2px 2px 20px -5px black inset;
-  /*border-radius: 10px;*/
+  /*box-shadow: 2px 2px 15px -5px aquamarine inset;*/
+  border: 1px solid aquamarine;
+  border-radius: 5px;
 }
 
 .panel-heading {
@@ -176,6 +177,12 @@ body > main > div > div > div.panel-footer > button { /* add a card link */
   right: -7px;
   border-top: 7px solid black;
   cursor: pointer;
+}
+
+.dropdown-menu {
+position: absolute;
+  top: 35px;
+  left: -125px;
 }
 
 /*.dropdown-menu {*/

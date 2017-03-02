@@ -22,9 +22,11 @@ initOldLists();
 const listTemplate = `
   <div class="panel-heading"> <span class="list-title"> New List </span> </div>
   <div class="dropdown">
-    <div class="arrow-down"></div>
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <span class="caret"></span>
+        </button>
     <ul class="dropdown-menu">
-      <li><span>Delete List</span></li>
+      <li><a href="#">Delete List</a></li>
     </ul>
   </div>
   <div class="panel-body">
