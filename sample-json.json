@@ -1,0 +1,35 @@
+{
+  "board": [
+    {
+      "title": "Backlog",
+      "tasks": [
+        {
+          "text": "Wash the dishes"
+        },
+        {
+          "text": "Do the laundry"
+        }
+      ]
+    },
+    {
+      "title": "Todo",
+      "tasks": [
+        {
+          "text": "Practice!"
+        }
+      ]
+    },
+    {
+      "title": "In Progress",
+      "tasks": [
+        {
+          "text": "Code Review"
+        }
+      ]
+    },
+    {
+      "title": "Done",
+      "tasks": []
+    }
+  ]
+}

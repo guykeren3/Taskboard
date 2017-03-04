@@ -38,12 +38,12 @@ const listTemplate = `
 
 let addListButton = document.querySelector('#add-list');
 
-function createList() {
+function createList(data) {
 //catching the main div to push the other divs into it
   const listParent = document.createElement('div');
   listParent.className = 'panel panel-default';
   listParent.innerHTML = listTemplate;
-
+  // console.info(data);
   let divWrapper = document.querySelector('.wrapper');
 
 // parentNode.insertBefore(newNode, referenceNode) example for how to use insertBefore node that been used below;
@@ -52,8 +52,26 @@ function createList() {
 
   // Handle clicks on list title
   let newListSpan = listParent.querySelector('.list-title');
+// console.info(newListSpan);
+
+  // gets the tasks text
+  if (typeof data !== 'undefined') {
+    let liName = data.title;
+    newListSpan.textContent = liName;   // enteres the object title as the list title
+    let liTasksArray = data.tasks;
+    // console.info('this is the tasks array', liTasksArray);
+    for (const i in liTasksArray) {
+      let textInListArray = liTasksArray[i].text;
+      console.info(textInListArray);
+      let ulInList = listParent.querySelector('.list-container');
+      let liInUl = document.createElement('li');
+      liInUl.textContent = textInListArray;
+      ulInList.appendChild(liInUl);
+    }
+  }
   // console.info(newListSpan);
   handleListTitle(newListSpan);
+
 
   // Handle list options button
   let listOptions = listParent.querySelector('.dropdown');
@@ -64,7 +82,6 @@ function createList() {
   cardButton.addEventListener('click', newCard);
   // console.log(cardButton);
 }
-
 addListButton.addEventListener('click', (e) => {
   createList();
 });
@@ -79,7 +96,6 @@ function addListenerToButtons() {
   }
 }
 
-
 function newCard(event) {
   const target = event.target;
   let divFooter = target.parentNode;
@@ -89,7 +105,12 @@ function newCard(event) {
   let divUl = divParent.querySelector('.list-container');
   // console.log(divUl);
   let newLi = document.createElement('li');
+  newLi.className = 'panel-body';
   newLi.textContent = 'example string just so the li wont be so thin'; // adding an example string.
+  let btnEdit = document.createElement('button');
+  btnEdit.className = ('btn btn-info btn-xs edit-card');
+  btnEdit.textContent = 'Edit card';
+  newLi.appendChild(btnEdit);
   // console.log(newLi);
   divUl.appendChild(newLi);
 }
@@ -150,7 +171,7 @@ function handleListTitle(titleElm) {
 // catch all the arrow buttons (divs)
 
 let subMenuButtons = document.querySelectorAll('.dropdown');
-console.info(subMenuButtons);
+// console.info(subMenuButtons);
 
 // apply event listener to every arrow button
 
@@ -163,7 +184,7 @@ for (const button of subMenuButtons) {
 function makeButtonSupportRemoveList(button) {
 
   let ulInsideButton = button.querySelector('.dropdown-menu');
-  console.info(ulInsideButton);
+  // console.info(ulInsideButton);
   ulInsideButton.style.display = 'none';
 
   button.addEventListener('click', (e) => {
@@ -198,3 +219,28 @@ function makeButtonSupportRemoveList(button) {
   })
 }
 
+function reqListener(event) {
+  const target = event.target;
+  let listObject = JSON.parse(target.responseText);
+  // console.info(listObject);
+  const boardArray = listObject.board;
+  console.info('this is the board which is inside the json', boardArray);
+
+  for (const list of boardArray) {
+    console.info('loop', list);
+    createList(list);
+    // let title = listObject[i].title;
+    // console.info(title);
+  }
+}
+
+const oReq = new XMLHttpRequest();
+oReq.addEventListener("load", reqListener);
+oReq.open("GET", "assets/board.json");
+oReq.send();
+
+// console.info(oReq);
+
+// let listObject = oReq.parse();
+//
+// console.info(listObject);
