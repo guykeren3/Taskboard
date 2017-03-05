@@ -135,6 +135,49 @@ body > main > div > div {
   display: none;
 }
 
+.wrapper-edit {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.5);
+  z-index: 20;
+}
+
+.show-edit {
+  display: block;
+  opacity: 1;
+  overflow: initial;
+  position: absolute;
+  top: 110px;
+  z-index: 30;
+}
+
+h4.modal-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.panel-body.adjust-checkbox {
+  padding-top: 0;
+}
+
+.col-sm-2.control-label.label-adjust {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.panel.panel-default.form-panel-adjust {
+  margin-left: 0;
+  max-height: 100px;
+  overflow: auto;
+}
+
+.btn.btn-danger.btn-delete-card {
+  margin-left: 15px;
+}
+
 li:hover.panel-body .edit-card {
   display: initial;
 }
@@ -178,7 +221,6 @@ li:hover.panel-body .edit-card {
   z-index: 10;
 }
 
-
 .panel-footer:hover {
   background-color: #bfbfbf;
 }
@@ -206,44 +248,44 @@ li:hover.panel-body .edit-card {
 }
 
 .dropdown-menu {
-position: absolute;
+  position: absolute;
   top: 35px;
   left: -125px;
 }
 
 /*.dropdown-menu {*/
-  /*height: 50px;*/
-  /*width: 200px;*/
-  /*display: flex;*/
-  /*background-color: white;*/
-  /*border: 1px solid darkgrey;*/
-  /*border-radius: 7px;*/
-  /*font-weight: 600;*/
-  /*position: absolute;*/
-  /*top: 22px;*/
-  /*right: -18px;*/
-  /*padding-left: 0;*/
+/*height: 50px;*/
+/*width: 200px;*/
+/*display: flex;*/
+/*background-color: white;*/
+/*border: 1px solid darkgrey;*/
+/*border-radius: 7px;*/
+/*font-weight: 600;*/
+/*position: absolute;*/
+/*top: 22px;*/
+/*right: -18px;*/
+/*padding-left: 0;*/
 /*}*/
 
 /*.dropdown-menu li {*/
-  /*list-style: none;*/
-  /*line-height: 50px; !* centers the li in the ul *!*/
-  /*height: 50px;*/
+/*list-style: none;*/
+/*line-height: 50px; !* centers the li in the ul *!*/
+/*height: 50px;*/
 /*}*/
 
 /*.dropdown-menu li:hover {*/
-  /*display: inline-block;*/
-  /*!*line-height: 30px;*!*/
-  /*!*height: 30px;*!*/
-  /*width: 200px;*/
-  /*!*padding-left: 20px;*!*/
-  /*background-color: rgba(156, 145, 145, .1);*/
+/*display: inline-block;*/
+/*!*line-height: 30px;*!*/
+/*!*height: 30px;*!*/
+/*width: 200px;*/
+/*!*padding-left: 20px;*!*/
+/*background-color: rgba(156, 145, 145, .1);*/
 /*}*/
 
 /*.dropdown-menu span:hover {*/
-  /*background-color: rgba(156, 145, 145, .1);*/
-  /*!*height: 25px;*!*/
-  /*width: 200px;*/
+/*background-color: rgba(156, 145, 145, .1);*/
+/*!*height: 25px;*!*/
+/*width: 200px;*/
 /*}*/
 
 @media (max-height: 420px) {
