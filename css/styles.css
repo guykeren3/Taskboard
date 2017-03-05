@@ -122,12 +122,6 @@ body > main > div > div {
   border-radius: 5px;
 }
 
-.initials {
-  /*position: absolute;*/
-  /*bottom: 25px;*/
-  /*right: 25px;*/
-}
-
 .edit-card {
   position: absolute;
   top: 5px;
@@ -141,8 +135,9 @@ body > main > div > div {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,.5);
+  background-color: rgba(0, 0, 0, .5);
   z-index: 20;
+  display: none;
 }
 
 .show-edit {
@@ -253,40 +248,18 @@ li:hover.panel-body .edit-card {
   left: -125px;
 }
 
-/*.dropdown-menu {*/
-/*height: 50px;*/
-/*width: 200px;*/
-/*display: flex;*/
-/*background-color: white;*/
-/*border: 1px solid darkgrey;*/
-/*border-radius: 7px;*/
-/*font-weight: 600;*/
-/*position: absolute;*/
-/*top: 22px;*/
-/*right: -18px;*/
-/*padding-left: 0;*/
-/*}*/
+/* refers to the list members initials span container */
 
-/*.dropdown-menu li {*/
-/*list-style: none;*/
-/*line-height: 50px; !* centers the li in the ul *!*/
-/*height: 50px;*/
-/*}*/
+.initials-container-position {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
 
-/*.dropdown-menu li:hover {*/
-/*display: inline-block;*/
-/*!*line-height: 30px;*!*/
-/*!*height: 30px;*!*/
-/*width: 200px;*/
-/*!*padding-left: 20px;*!*/
-/*background-color: rgba(156, 145, 145, .1);*/
-/*}*/
-
-/*.dropdown-menu span:hover {*/
-/*background-color: rgba(156, 145, 145, .1);*/
-/*!*height: 25px;*!*/
-/*width: 200px;*/
-/*}*/
+.initials {
+  display: inline-block;
+  margin-right: 5px;
+}
 
 @media (max-height: 420px) {
   .panel-body ul {

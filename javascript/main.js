@@ -79,12 +79,11 @@ function createList(data) {
     let liTasksArray = data.tasks;
     // console.info('this is the tasks array', liTasksArray);
     for (const i in liTasksArray) {
-      let textInListArray = liTasksArray[i].text;
-      console.info(textInListArray);
+      let cardData = liTasksArray[i];
+      // console.info(textInListArray);
       let ulInList = listParent.querySelector('.list-container');
-      let liInUl = document.createElement('li');
-      liInUl.textContent = textInListArray;
-      ulInList.appendChild(liInUl);
+
+      addCard(ulInList, cardData);
     }
   }
 
@@ -98,7 +97,7 @@ function createList(data) {
 
   // Handle clicks on Add Card
   let cardButton = listParent.querySelector('.add-card-button');
-  cardButton.addEventListener('click', newCard);
+  cardButton.addEventListener('click', newCardClickHandler);
   // console.log(cardButton);
 }
 addListButton.addEventListener('click', (e) => {
@@ -110,12 +109,87 @@ function addListenerToButtons() {
   // console.log(cardButtonString);
 
   for (const button of cardButtonString) {
-    button.addEventListener('click', newCard);
+    button.addEventListener('click', newCardClickHandler);
     // console.info('should see a button', button);
   }
 }
 
-function newCard(event) {
+function addCard(container, data) {
+  let newLi = document.createElement('li');
+  newLi.className = 'panel-body';
+
+  if (typeof data !== 'undefined') {
+    let membersArray = data.members;
+    newLi.textContent = data.text;
+    let teamatesInitialContainer = document.createElement('div');
+    teamatesInitialContainer.className = 'initials-container-position';
+
+    for (const member of membersArray) {
+      // console.info('span with names', member);
+      let teamatesInitialsSpan = document.createElement('span');
+      teamatesInitialsSpan.className = 'label label-primary initials';
+      teamatesInitialsSpan.setAttribute('title', member);
+      teamatesInitialContainer.appendChild(teamatesInitialsSpan);
+
+      let membersArrayBySpaces = member.split(' ');
+      // console.info(membersArrayBySpaces);
+      // from full name takes each name and puts it in the array
+      let initials = '';
+
+      for (const name of membersArrayBySpaces) {
+        let firstLetter = name.charAt(0);
+        // will bring the first letter of each name
+        // console.info('firstLetter', firstLetter);
+        initials += firstLetter;
+        // initials = initials + firstLetter every iteration
+      }
+      // console.info(initials);
+      teamatesInitialsSpan.textContent = initials;
+      // console.info('members splits more', membersArrayBySpaces);
+      newLi.appendChild(teamatesInitialContainer);
+    }
+  }
+  else {
+    // adding an example string.
+    newLi.textContent = 'example string just so the li wont be so thin';
+  }
+  let btnEdit = document.createElement('button');
+  btnEdit.className = ('btn btn-info btn-xs edit-card');
+  btnEdit.textContent = 'Edit card';
+
+  newLi.appendChild(btnEdit);
+  // console.log(newLi);
+  container.appendChild(newLi);
+
+  btnEdit.addEventListener('click', (e) => {
+    let target = e.target;
+    // console.info(target);
+    const modal = document.querySelector('.wrapper-edit');
+    // console.info('this is the modal', modal);
+    let closeModalX = document.querySelector('.modal-header > button > span');
+
+    let closeModalButton = document.querySelector('.modal-footer > button');
+
+    if (modal.style.display === 'none') {
+      modal.style.display = 'block';
+
+      closeModalX.addEventListener('click', (event) => {
+        let target = event.target;
+        if (modal.style.display === 'block') {
+          modal.style.display = 'none';
+        }
+      });
+      closeModalButton.addEventListener('click', (event) => {
+        let target = event.target;
+        if (modal.style.display === 'block') {
+          modal.style.display = 'none';
+        }
+      });
+    }
+  })
+}
+
+function newCardClickHandler(event) {
   const target = event.target;
   let divFooter = target.parentNode;
   // console.log(divFooter);
@@ -123,15 +197,8 @@ function newCard(event) {
   // console.log(divParent);
   let divUl = divParent.querySelector('.list-container');
   // console.log(divUl);
-  let newLi = document.createElement('li');
-  newLi.className = 'panel-body';
-  newLi.textContent = 'example string just so the li wont be so thin'; // adding an example string.
-  let btnEdit = document.createElement('button');
-  btnEdit.className = ('btn btn-info btn-xs edit-card');
-  btnEdit.textContent = 'Edit card';
-  newLi.appendChild(btnEdit);
-  // console.log(newLi);
-  divUl.appendChild(newLi);
+
+  addCard(divUl);
 }
 
 // event listeners on title function
@@ -208,7 +275,7 @@ function makeButtonSupportRemoveList(button) {
 
   button.addEventListener('click', (e) => {
     const button = e.target;
-    console.info(button);
+    // console.info(button);
 // clicking on the arrow button turns the display ul to = block
     if (ulInsideButton.style.display === 'none') {
       ulInsideButton.style.display = 'block';
@@ -222,9 +289,9 @@ function makeButtonSupportRemoveList(button) {
   liInsideUlOfButtons.addEventListener('click', (e) => {
     const li = e.target;
     let divPanelPanelDefault = li.closest('.panel.panel-default');
-    console.info(divPanelPanelDefault);
+    // console.info(divPanelPanelDefault);
     let headerSpan = divPanelPanelDefault.querySelector('.panel-heading > span');
-    console.info(headerSpan);
+    // console.info(headerSpan);
     let headerSpanText = headerSpan.textContent;
     // let divHeader = divPanelPanelDefault.querySelector('span');
     // console.info(divHeader);
@@ -238,15 +305,17 @@ function makeButtonSupportRemoveList(button) {
   })
 }
 
+// getting the JSON and parsing it
+
 function reqListener(event) {
   const target = event.target;
   let listObject = JSON.parse(target.responseText);
   // console.info(listObject);
   const boardArray = listObject.board;
-  console.info('this is the board which is inside the json', boardArray);
+  // console.info('this is the board which is inside the json', boardArray);
 
   for (const list of boardArray) {
-    console.info('loop', list);
+    // console.info('loop', list);
     createList(list);
     // let title = listObject[i].title;
     // console.info(title);
@@ -263,3 +332,17 @@ oReq.send();
 // let listObject = oReq.parse();
 //
 // console.info(listObject);
+
+// ===============================================
+
+const boardButton = document.querySelector('.board');
+const membersButoon = document.querySelector('.members');
+
+// for now will hide the main to work on members ui
+
+membersButoon.addEventListener('click', (e) => {
+  let main = document.querySelector('main'); {
+    main.style.display = 'none';
+  }
+});
+

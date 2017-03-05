@@ -15,8 +15,8 @@
         <img alt="clipboard" src="assets/taskboard%20logo.svg" height="40">
       </a>
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#"> Board <span class="sr-only">(current)</span></a></li>
-        <li><a href="#"> Members </a></li>
+        <li class="active board"><a href="#"> Board <span class="sr-only">(current)</span></a></li>
+        <li class="members"><a href="#"> Members </a></li>
       </ul>
     </div>
   </div>
@@ -25,13 +25,13 @@
 <main>
 
   <!--Edit task modal-->
-  <div class="wrapper-edit">
+  <div class="wrapper-edit" style="display: none">
     <div class="modal fade show-edit" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-              aria-hidden="true">&times;</span></button>
+              aria-hidden="true">x</span></button>
             <h4 class="modal-title">Edit card</h4>
           </div>
           <div class="modal-body">
@@ -96,285 +96,11 @@
 
   <div class="wrapper">
 
-    <div class="panel panel-default">
-      <!--button template---------->
-      <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="true">
-          <span class="caret"></span>
-        </button>
-        <!--Submenu template-->
-        <ul class="dropdown-menu">
-          <li><a href="#">Delete List</a></li>
-        </ul>
-      </div>
-      <div class="panel-heading"><span class="list-title"> Backlog </span></div>
-      <div class="panel-body">
-        <ul class="list-container">
-          <li class="panel-body">
-            <button type="button" class="btn btn-info btn-xs edit-card">Edit card</button>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos exercitationem ipsum
-            itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit.
-            <span class="label label-primary initials" title="Alex">AE</span>
-            <span class="label label-primary initials" title="Dima">DV</span>
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-        </ul>
-      </div>
-      <div class="panel-footer">
-
-        <button class="add-card-button">Add a card</button>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
-      <!--button template---------->
-      <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="true">
-          <span class="caret"></span>
-        </button>
-        <!--Submenu template-->
-        <ul class="dropdown-menu">
-          <li><a href="#">Delete List</a></li>
-        </ul>
-      </div>
-      <div class="panel-heading"><span class="list-title">  TODO </span></div>
-      <div class="panel-body">
-        <ul class="list-container">
-          <li class="panel-body">
-            <button type="button" class="btn btn-info btn-xs edit-card">Edit card</button>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos exercitationem ipsum
-            itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-        </ul>
-      </div>
-      <div class="panel-footer">
-        <button class="add-card-button">Add a card</button>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
-      <!--button template---------->
-      <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="true">
-          <span class="caret"></span>
-        </button>
-        <!--Submenu template-->
-        <ul class="dropdown-menu">
-          <li><a href="#">Delete List</a></li>
-        </ul>
-      </div>
-      <div class="panel-heading"><span class="list-title">  In progress </span></div>
-      <div class="panel-body">
-        <ul class="list-container">
-          <li class="panel-body">
-            <button type="button" class="btn btn-info btn-xs edit-card">Edit card</button>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos exercitationem ipsum
-            itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-        </ul>
-      </div>
-      <div class="panel-footer">
-        <button class="add-card-button">Add a card</button>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
-      <!--button template---------->
-      <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="true">
-          <span class="caret"></span>
-        </button>
-        <!--Submenu template-->
-        <ul class="dropdown-menu">
-          <li><a href="#">Delete List</a></li>
-        </ul>
-      </div>
-      <div class="panel-heading"><span class="list-title">  Done </span></div>
-      <div class="panel-body">
-        <ul class="list-container">
-          <li class="panel-body">
-            <button type="button" class="btn btn-info btn-xs edit-card">Edit card</button>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos exercitationem ipsum
-            itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-          <li class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dolorem eos
-            exercitationem ipsum itaque
-            libero natus nisi nobis sit tempora! Accusamus consequuntur corporis dicta et impedit quasi saepe
-            similique
-            suscipit
-          </li>
-        </ul>
-      </div>
-      <div class="panel-footer">
-        <button class="add-card-button">Add a card</button>
-      </div>
-    </div>
-
     <button class="btn add-list-btn" id="add-list"> Add a list...</button>
   </div>
 
   <script src="javascript/main.js"></script>
 </main>
-
 
 </body>
 </html>
