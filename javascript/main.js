@@ -17,8 +17,9 @@ const appData = {
 
 // creating new list
 
-const listTemplate = `
-  <div class="panel-heading"> <span class="list-title"> New List </span> </div>
+function getListTemplate(listNum) {
+  return `
+  <div class="panel-heading"> <span class="list-title"> New List ${listNum} </span> </div>
   <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           <span class="caret"></span>
@@ -33,14 +34,14 @@ const listTemplate = `
   </div>
   <div class="panel-footer"><button class="add-card-button">Add a card</button></div>
 `;
-
+}
 function createList(data) {
   // console.info('createList', data);
   let addListButton = document.querySelector('#add-list');
 //catching the main div to push the other divs into it
   const listParent = document.createElement('div');
   listParent.className = 'panel panel-default';
-  listParent.innerHTML = listTemplate;
+  listParent.innerHTML = getListTemplate(appData.lists.length);
   // console.info(data);
   let divWrapper = document.querySelector('.wrapper');
 
@@ -185,16 +186,17 @@ function newCardClickHandler(event) {
 
   // running find on the appData to compare between my title and the appData title and then pushing the card into the correct list in appData.
 
-  console.info(appData.lists);
 
   const currentList = appData.lists.find((list) => liTitle === list.title);
   const emptyCard = {
     members: [],
     text: 'Add new task'
   };
-  console.info(appData);
+
+  console.info(currentList);
+  // console.info(appData);
   console.info(appData.lists);
-  currentList.lists.tasks.push(emptyCard);
+  currentList.tasks.push(emptyCard);
   addCard(divUl);
 }
 
@@ -436,8 +438,11 @@ function drawBoardScreen() {
 
   addListButton.addEventListener('click', (e) => {
       createList();
+
+      let listAmount = appData.lists.length;
+
       const newList = {
-        title: 'New List',
+        title: `New List ${listAmount}`,
         tasks: []
       };
       appData.lists.push(newList);
