@@ -2,20 +2,18 @@
  * Created by Guy on 27/02/2017.
  */
 
-// initializing new lists and using handleListTitle to change the title names of the old lists.
+/**
+ Model
+ */
+const appData = {
+  lists: [],
+  members: []
+};
 
-function initOldLists() {
-  let oldListSpans = document.querySelectorAll('.list-title');
-  // console.log(oldListSpans);
 
-  for (const span of oldListSpans) {
-    // console.log(span);
-    handleListTitle(span);
-  }
-  addListenerToButtons();
-}
-
-initOldLists();
+/**
+ View
+ */
 
 // creating new list
 
@@ -36,27 +34,9 @@ const listTemplate = `
   <div class="panel-footer"><button class="add-card-button">Add a card</button></div>
 `;
 
-// const editCardTemplate = `<div class="modal fade" tabindex="-1" role="dialog">
-//   <div class="modal-dialog" role="document">
-//     <div class="modal-content">
-//       <div class="modal-header">
-//         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-//         <h4 class="modal-title">Modal title</h4>
-//       </div>
-//       <div class="modal-body">
-//         <p>One fine body&hellip;</p>
-//       </div>
-//       <div class="modal-footer">
-//         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-//         <button type="button" class="btn btn-primary">Save changes</button>
-//       </div>
-//     </div><!-- /.modal-content -->
-//   </div><!-- /.modal-dialog -->
-// </div><!-- /.modal -->`;
-
-let addListButton = document.querySelector('#add-list');
-
 function createList(data) {
+  // console.info('createList', data);
+  let addListButton = document.querySelector('#add-list');
 //catching the main div to push the other divs into it
   const listParent = document.createElement('div');
   listParent.className = 'panel panel-default';
@@ -100,9 +80,6 @@ function createList(data) {
   cardButton.addEventListener('click', newCardClickHandler);
   // console.log(cardButton);
 }
-addListButton.addEventListener('click', (e) => {
-  createList();
-});
 
 function addListenerToButtons() {
   let cardButtonString = document.querySelectorAll('.add-card-button');
@@ -152,6 +129,7 @@ function addCard(container, data) {
   else {
     // adding an example string.
     newLi.textContent = 'example string just so the li wont be so thin';
+
   }
   let btnEdit = document.createElement('button');
   btnEdit.className = ('btn btn-info btn-xs edit-card');
@@ -307,25 +285,69 @@ function makeButtonSupportRemoveList(button) {
 
 // getting the JSON and parsing it
 
-function reqListener(event) {
+function boardReqListener(event) {
   const target = event.target;
   let listObject = JSON.parse(target.responseText);
   // console.info(listObject);
   const boardArray = listObject.board;
   // console.info('this is the board which is inside the json', boardArray);
 
-  for (const list of boardArray) {
+  // update appData
+  appData.lists = boardArray;
+  // console.info(appData);
+  if (isAllDataReady()) {
+    intialListByHashtag();
+  }
+}
+
+function jsonBoardReq() {
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", boardReqListener);
+  xhr.open("GET", "assets/board.json");
+  xhr.send();
+}
+
+// getting the Members and parsing it
+
+function membersReqListener(event) {
+  const target = event.target;
+  let membersObject = JSON.parse(target.responseText);
+  // console.info(membersObject);
+  const membersArray = membersObject.members;
+  // console.info('this is the board which is inside the json', boardArray);
+
+  // update appData
+  appData.members = membersArray;
+  // console.info(membersArray);
+  if (isAllDataReady()) {
+    intialListByHashtag();
+  }
+}
+
+function jsonMembersReq() {
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", membersReqListener);
+  xhr.open("GET", "assets/members.json");
+  xhr.send();
+}
+
+function isAllDataReady () {
+  if (appData.lists.length && appData.members.length) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+function createListOfData() {
+  for (const list of appData.lists) {
     // console.info('loop', list);
     createList(list);
     // let title = listObject[i].title;
     // console.info(title);
   }
 }
-
-const oReq = new XMLHttpRequest();
-oReq.addEventListener("load", reqListener);
-oReq.open("GET", "assets/board.json");
-oReq.send();
 
 // console.info(oReq);
 
@@ -335,14 +357,148 @@ oReq.send();
 
 // ===============================================
 
-const boardButton = document.querySelector('.board');
-const membersButoon = document.querySelector('.members');
-
 // for now will hide the main to work on members ui
 
-membersButoon.addEventListener('click', (e) => {
-  let main = document.querySelector('main'); {
-    main.style.display = 'none';
+// membersButton.addEventListener('click', (e) => {
+//   membersButton.className = 'active members';
+//   boardButton.className = 'board';
+// });
+
+const membersTemplateWrapper = `
+  <span class="members-header">Taskboard Members</span>
+  <ul class="list-group col-sm-8 members-list">`;
+
+const membersTemplate = `<form class="members-page-form normal-mode">
+        <input type="text" class="form-control edit-input" placeholder="Current">
+      </form>
+      <div class="align-members-buttons">
+        <button type="button"
+                class="btn btn-info btn-sm none-edit">Edit
+        </button>
+        <button type="button" class="btn btn-danger btn-sm none-edit">Delete</button>
+        <button type="button" class="btn btn-default btn-sm edit-buttons">Cancel</button>
+        <button type="button" class="btn btn-success btn-sm edit-buttons save-data">Save</button>
+      </div>
+    </li>`;
+const membersTemplateAddMember = `<li class="list-group-item">
+      <form class="members-page-form input-members">
+        <input type="text" class="form-control input-fix-members" placeholder="Add new member">
+        <button type="button" class="btn btn-primary">Add</button>
+      </form>
+    </li>
+  </ul>
+</div>`;
+
+const boardButton = document.querySelector('.board');
+const membersButton = document.querySelector('.members');
+
+const addListTemplate = `<div class="wrapper">
+    <button class="btn add-list-btn" id="add-list"> Add a list...</button>
+  </div>`;
+
+let mainEle = document.querySelector('main');
+
+function drawBoardScreen() {
+  mainEle.innerHTML = addListTemplate;
+  let addListButton = document.querySelector('#add-list');
+
+  addListButton.addEventListener('click', (e) => {
+    createList();
+  });
+}
+
+function drawMembersScreen() {
+  createMembers();
+}
+
+function createMembers() {
+  let membersDiv = document.createElement('div');
+  membersDiv.className = 'list-group col-sm-8 members-fix';
+  membersDiv.innerHTML = membersTemplateWrapper;
+  let membersUl = membersDiv.querySelector('div.members-fix ul.members-list');
+  for (let member of appData.members) {
+    let membersLi = document.createElement('li');
+    membersLi.className = 'list-group-item';
+    membersLi.innerHTML = membersTemplate;
+    let spanInLiMembers = document.createElement('span');
+    spanInLiMembers.className = 'reset-span';
+    spanInLiMembers.textContent = member.name;
+    membersLi.appendChild(spanInLiMembers);
+    membersUl.appendChild(membersLi);
   }
+
+  let convertMembersToString = membersDiv.outerHTML;
+
+  mainEle.innerHTML =  convertMembersToString;
+  manageEditMode();
+}
+
+function isTabActive() {
+  let hashWindow = window.location.hash;
+  if (hashWindow.includes('board')) {
+    boardButton.classList.add('active');
+    membersButton.classList.remove('active');
+  }
+  if (hashWindow.includes('members')) {
+    boardButton.classList.remove('active');
+    membersButton.classList.add('active');
+  }
+}
+
+function intialListByHashtag() {
+console.info('Should Run Once if loaded both jsons and then intialized');
+  let hashWindow = window.location.hash;
+
+  if (hashWindow !== '') {
+    if (hashWindow.includes('board')) {
+      drawBoardScreen();
+      createListOfData();
+      isTabActive();
+    }
+    if (hashWindow.includes('members')) {
+      drawMembersScreen();
+      manageEditMode();
+      isTabActive();
+    }
+  }
+  else {
+    window.location.hash = '#board';
+  }
+}
+
+function manageEditMode() {
+  const editButtonMembers = document.querySelectorAll('.align-members-buttons button:not(.save-data)');
+
+  const editButtonMembersSaveData = document.querySelectorAll('.align-members-buttons button.save-data');
+// console.info(editButtonMembers);
+//   console.info(editButtonMembersSaveData);
+
+  for (const btn of editButtonMembers) {
+    btn.addEventListener('click', (e) => {
+      let target = e.target;
+      let liParent = target.closest('li');
+      let spanInLi = liParent.querySelector('.reset-span');
+      let spanContentInLi = spanInLi.textContent;
+      let inputMembers = liParent.querySelector('input');
+      inputMembers.value = spanContentInLi;
+      liParent.classList.toggle('edit-mode');
+      // console.info(target);
+
+      // trying to switch the span with the input when clicking save
+
+      for (const btnSave of editButtonMembersSaveData) {
+        btnSave.addEventListener('click', (e) => {
+          spanContentInLi.textContent = inputMembers.value;
+          liParent.classList.toggle('edit-mode');
+        })
+      }
+    });
+  }
+}
+
+window.addEventListener('hashchange', (event) => {
+  intialListByHashtag();
 });
 
+jsonBoardReq();
+jsonMembersReq();
