@@ -204,9 +204,14 @@ function newCardClickHandler(event) {
 
 function handleListTitle(titleElm) {
   titleElm.addEventListener('click', (e) => {
+
+    // console.info(appData.lists);
     const span = e.target;
     span.style.display = 'none';
     let text = span.innerHTML;
+    const currentList = appData.lists.find((list) => text === list.title);
+    // let currentListTitle = currentList.title;
+    // console.info(currentListTitle);
     let input = document.createElement("input");
     input.type = "text";
     input.value = span.innerHTML;
@@ -224,6 +229,7 @@ function handleListTitle(titleElm) {
 
         // Update the span
         span.innerHTML = input.value;
+        currentList.title = input.value;
         input.parentNode.removeChild(input);
 
         // Show the e again
@@ -243,7 +249,14 @@ function handleListTitle(titleElm) {
       const ENTER = 13;
       const input = e.target;
       let inputText = input.value;
+      let inputParent = input.closest('.panel-heading');
+      let titleSpanContent = inputParent.querySelector('span.list-title').textContent;
+      console.info(titleSpanContent);
+      console.info(appData.lists);
+
       if (e.keyCode === ENTER) {
+        const currentList = appData.lists.find((list) => titleSpanContent === list.title);
+        currentList.title = input.value;
         e.target.blur();
       }
     });
