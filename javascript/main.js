@@ -19,7 +19,7 @@ const appData = {
 
 function getListTemplate(listNum) {
   return `
-  <div class="panel-heading"> <span class="list-title"> New List ${listNum} </span> </div>
+  <div class="panel-heading"> <span class="list-title">New List ${listNum}</span> </div>
   <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           <span class="caret"></span>
