@@ -251,8 +251,8 @@ function handleListTitle(titleElm) {
       let inputText = input.value;
       let inputParent = input.closest('.panel-heading');
       let titleSpanContent = inputParent.querySelector('span.list-title').textContent;
-      console.info(titleSpanContent);
-      console.info(appData.lists);
+      // console.info(titleSpanContent);
+      // console.info(appData.lists);
 
       if (e.keyCode === ENTER) {
         const currentList = appData.lists.find((list) => titleSpanContent === list.title);
@@ -486,7 +486,6 @@ function createMembers() {
   let convertMembersToString = membersDiv.outerHTML;
 
   mainEle.innerHTML = convertMembersToString;
-  manageEditMode();
 }
 
 function isTabActive() {
@@ -527,24 +526,23 @@ function manageEditMode() {
 
   const editButtonMembersSaveData = document.querySelectorAll('.align-members-buttons button.save-data');
 // console.info(editButtonMembers);
-//   console.info(editButtonMembersSaveData);
+  // console.info(editButtonMembersSaveData);
 
   for (const btn of editButtonMembers) {
     btn.addEventListener('click', (e) => {
       let target = e.target;
       let liParent = target.closest('li');
       let spanInLi = liParent.querySelector('.reset-span');
-      let spanContentInLi = spanInLi.textContent;
       let inputMembers = liParent.querySelector('input');
-      inputMembers.value = spanContentInLi;
+      inputMembers.value = spanInLi.textContent;
       liParent.classList.toggle('edit-mode');
-      // console.info(target);
-
+      console.info(target);
+console.info(liParent);
       // trying to switch the span with the input when clicking save
 
       for (const btnSave of editButtonMembersSaveData) {
         btnSave.addEventListener('click', (e) => {
-          spanContentInLi.textContent = inputMembers.value;
+          spanInLi.textContent = inputMembers.value;
           liParent.classList.toggle('edit-mode');
         })
       }
