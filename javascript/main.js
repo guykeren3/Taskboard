@@ -10,164 +10,41 @@ const appData = {
   members: []
 };
 
+function updateDataBoard(jsonArray) {
+  appData.lists = jsonArray;
+}
+
+function updateDataMembers(jsonArray) {
+  appData.members = jsonArray;
+}
+
+function updateDataWithEmptyList() {
+  let listAmount = appData.lists.length;
+
+  const newList = {
+    title: `New List ${listAmount}`,
+    tasks: []
+  };
+  appData.lists.push(newList);
+}
+
+function addEmptyCardToData(myData, title) {
+
+  // running find on the appData to compare between my title and the appData title and then pushing the card into the correct list in appData.
+
+  const currentList = myData.lists.find((list) => title === list.title);
+
+  const emptyCard = {
+    members: [],
+    text: 'Add new task',
+    id: uuid()
+  };
+  currentList.tasks.push(emptyCard);
+}
 
 /**
  View
  */
-
-// creating new list
-
-function getListTemplate(listNum) {
-  return `
-  <div class="panel-heading"> <span class="list-title">New List ${listNum}</span> </div>
-  <div class="dropdown">
-    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          <span class="caret"></span>
-        </button>
-    <ul class="dropdown-menu">
-      <li><a href="#">Delete List</a></li>
-    </ul>
-  </div>
-  <div class="panel-body">
-  <ul class="list-container">
-  </ul>
-  </div>
-  <div class="panel-footer"><button class="add-card-button">Add a card</button></div>
-`;
-}
-function createList(data) {
-  // console.info('createList', data);
-  let addListButton = document.querySelector('#add-list');
-//catching the main div to push the other divs into it
-  const listParent = document.createElement('div');
-  listParent.className = 'panel panel-default';
-  listParent.innerHTML = getListTemplate(appData.lists.length);
-  // console.info(data);
-  let divWrapper = document.querySelector('.wrapper');
-
-// parentNode.insertBefore(newNode, referenceNode) example for how to use insertBefore node that been used below;
-
-  divWrapper.insertBefore(listParent, addListButton);
-
-  // Handle clicks on list title
-  let newListSpan = listParent.querySelector('.list-title');
-// console.info(newListSpan);
-
-  // gets the tasks text
-  if (typeof data !== 'undefined') {
-    let liName = data.title;
-    newListSpan.textContent = liName;   // enteres the object title as the list title
-    let liTasksArray = data.tasks;
-    // console.info('this is the tasks array', liTasksArray);
-    for (const i in liTasksArray) {
-      let cardData = liTasksArray[i];
-      // console.info(textInListArray);
-      let ulInList = listParent.querySelector('.list-container');
-
-      addCard(ulInList, cardData);
-    }
-  }
-
-  // console.info(newListSpan);
-  handleListTitle(newListSpan);
-
-
-  // Handle list options button
-  let listOptions = listParent.querySelector('.dropdown');
-  makeButtonSupportRemoveList(listOptions);
-
-  // Handle clicks on Add Card
-  let cardButton = listParent.querySelector('.add-card-button');
-  cardButton.addEventListener('click', newCardClickHandler);
-  // console.log(cardButton);
-}
-
-function addListenerToButtons() {
-  let cardButtonString = document.querySelectorAll('.add-card-button');
-  // console.log(cardButtonString);
-
-  for (const button of cardButtonString) {
-    button.addEventListener('click', newCardClickHandler);
-    // console.info('should see a button', button);
-  }
-}
-
-function addCard(container, data) {
-  let newLi = document.createElement('li');
-  newLi.className = 'panel-body';
-
-  if (typeof data !== 'undefined') {
-    let membersArray = data.members;
-    newLi.textContent = data.text;
-    let teamatesInitialContainer = document.createElement('div');
-    teamatesInitialContainer.className = 'initials-container-position';
-
-    for (const member of membersArray) {
-      // console.info('span with names', member);
-      let teamatesInitialsSpan = document.createElement('span');
-      teamatesInitialsSpan.className = 'label label-primary initials';
-      teamatesInitialsSpan.setAttribute('title', member);
-      teamatesInitialContainer.appendChild(teamatesInitialsSpan);
-
-      let membersArrayBySpaces = member.split(' ');
-      // console.info(membersArrayBySpaces);
-      // from full name takes each name and puts it in the array
-      let initials = '';
-
-      for (const name of membersArrayBySpaces) {
-        let firstLetter = name.charAt(0);
-        // will bring the first letter of each name
-        // console.info('firstLetter', firstLetter);
-        initials += firstLetter;
-        // initials = initials + firstLetter every iteration
-      }
-      // console.info(initials);
-      teamatesInitialsSpan.textContent = initials;
-      // console.info('members splits more', membersArrayBySpaces);
-      newLi.appendChild(teamatesInitialContainer);
-    }
-  }
-
-  else {
-    // adding an example string.
-    newLi.textContent = 'Add new task';
-  }
-
-  let btnEdit = document.createElement('button');
-  btnEdit.className = ('btn btn-info btn-xs edit-card');
-  btnEdit.textContent = 'Edit card';
-
-  newLi.appendChild(btnEdit);
-  // console.log(newLi);
-  container.appendChild(newLi);
-
-  btnEdit.addEventListener('click', (e) => {
-    let target = e.target;
-    // console.info(target);
-    const modal = document.querySelector('.wrapper-edit');
-    // console.info('this is the modal', modal);
-    let closeModalX = document.querySelector('.modal-header > button > span');
-
-    let closeModalButton = document.querySelector('.modal-footer > button');
-
-    if (modal.style.display === 'none') {
-      modal.style.display = 'block';
-
-      closeModalX.addEventListener('click', (event) => {
-        let target = event.target;
-        if (modal.style.display === 'block') {
-          modal.style.display = 'none';
-        }
-      });
-      closeModalButton.addEventListener('click', (event) => {
-        let target = event.target;
-        if (modal.style.display === 'block') {
-          modal.style.display = 'none';
-        }
-      });
-    }
-  })
-}
 
 
 function newCardClickHandler(event) {
@@ -184,19 +61,7 @@ function newCardClickHandler(event) {
   let divParentOfLi = target.closest('.panel.panel-default');
   let liTitle = divParentOfLi.querySelector('span.list-title').textContent;
 
-  // running find on the appData to compare between my title and the appData title and then pushing the card into the correct list in appData.
-
-
-  const currentList = appData.lists.find((list) => liTitle === list.title);
-  const emptyCard = {
-    members: [],
-    text: 'Add new task'
-  };
-
-  console.info(currentList);
-  // console.info(appData);
-  console.info(appData.lists);
-  currentList.tasks.push(emptyCard);
+  addEmptyCardToData(appData, liTitle);
   addCard(divUl);
 }
 
@@ -263,22 +128,6 @@ function handleListTitle(titleElm) {
   });
 }
 
-// delete section
-
-
-// catch all the arrow buttons (divs)
-
-let subMenuButtons = document.querySelectorAll('.dropdown');
-// console.info(subMenuButtons);
-
-// apply event listener to every arrow button
-
-for (const button of subMenuButtons) {
-  // console.info(button);
-  // putting display = none on all the button list to initialize it
-  makeButtonSupportRemoveList(button)
-}
-
 function makeButtonSupportRemoveList(button) {
 
   let ulInsideButton = button.querySelector('.dropdown-menu');
@@ -310,7 +159,7 @@ function makeButtonSupportRemoveList(button) {
     let result = window.confirm(`Deleting ${headerSpanText} list. Are you sure?`);
     if (result === true) {
       divPanelPanelDefault.parentNode.removeChild(divPanelPanelDefault);
-      console.info(appData.lists);
+      // console.info(appData.lists);
 
       let liTitle = headerSpanText;
       //
@@ -338,9 +187,7 @@ function boardReqListener(event) {
   // console.info(listObject);
   const boardArray = listObject.board;
   // console.info('this is the board which is inside the json', boardArray);
-
-  // update appData
-  appData.lists = boardArray;
+  updateDataBoard(boardArray);
   // console.info(appData);
   if (isAllDataReady()) {
     intialListByHashtag();
@@ -364,8 +211,8 @@ function membersReqListener(event) {
   // console.info('this is the board which is inside the json', boardArray);
 
   // update appData
-  appData.members = membersArray;
-  // console.info(membersArray);
+  updateDataMembers(membersArray);
+
   if (isAllDataReady()) {
     intialListByHashtag();
   }
@@ -396,21 +243,230 @@ function createListOfData() {
   }
 }
 
-// console.info(oReq);
+function drawBoardScreen() {
+  mainEle.innerHTML = addListTemplate;
+  let addListButton = document.querySelector('#add-list');
 
-// let listObject = oReq.parse();
-//
-// console.info(listObject);
+  addListButton.addEventListener('click', (e) => {
+      createList();
+      updateDataWithEmptyList()
+    }
+  )
+}
+
+function drawMembersScreen() {
+  createMembers();
+}
+
+function createMembers() {
+  let membersDiv = document.createElement('div');
+  membersDiv.className = 'list-group col-sm-8 members-fix';
+  membersDiv.innerHTML = membersTemplateWrapper;
+  let membersUl = membersDiv.querySelector('div.members-fix ul.members-list');
+  for (let member of appData.members) {
+    let membersLi = document.createElement('li');
+    membersLi.className = 'list-group-item';
+    membersLi.innerHTML = membersTemplate;
+    let spanInLiMembers = document.createElement('span');
+    spanInLiMembers.className = 'reset-span';
+    spanInLiMembers.textContent = member.name;
+    membersLi.appendChild(spanInLiMembers);
+    membersUl.appendChild(membersLi);
+  }
+
+  //creating a div to push the add new member input into the ul.
+
+  let createMembersDivContainer = document.createElement('div');
+  createMembersDivContainer.innerHTML = membersTemplateAddMember;
+  membersUl.appendChild(createMembersDivContainer);
+
+  //need to work on event listener here for the input members
+  let addMemberButton = createMembersDivContainer.querySelector('.members-page-form button');
+  // console.info(addMemberButton);
+  // will add event listener on addMemberButton to add members to appData
+
+  addMemberButton.addEventListener('click', (e) => {
+    console.info(e.target);
+    const addButton = e.target;
+    // console.info(addButton);
+  });
+
+  let convertMembersToString = membersDiv.outerHTML;
+
+  mainEle.innerHTML = convertMembersToString;
+}
+
+function createList(data) {
+  // console.info('createList', data);
+  let addListButton = document.querySelector('#add-list');
+//catching the main div to push the other divs into it
+  const listParent = document.createElement('div');
+  listParent.className = 'panel panel-default';
+  listParent.setAttribute('data-id', uuid());
+  listParent.innerHTML = getListTemplate(appData.lists.length);
+  // console.info(data);
+  let divWrapper = document.querySelector('.wrapper');
+
+// parentNode.insertBefore(newNode, referenceNode) example for how to use insertBefore node that been used below;
+
+  divWrapper.insertBefore(listParent, addListButton);
+
+  // Handle clicks on list title
+  let newListSpan = listParent.querySelector('.list-title');
+// console.info(newListSpan);
+
+  // gets the tasks text
+  if (typeof data !== 'undefined') {
+    let liName = data.title;
+    newListSpan.textContent = liName;   // enteres the object title as the list title
+    let liTasksArray = data.tasks;
+    // console.info('this is the tasks array', liTasksArray);
+    for (const i in liTasksArray) {
+      let cardData = liTasksArray[i];
+      // console.info(textInListArray);
+      let ulInList = listParent.querySelector('.list-container');
+
+      addCard(ulInList, cardData);
+    }
+  }
+
+  // console.info(newListSpan);
+  handleListTitle(newListSpan);
+
+
+  // Handle list options button
+  let listOptions = listParent.querySelector('.dropdown');
+  makeButtonSupportRemoveList(listOptions);
+
+  // Handle clicks on Add Card
+  let cardButton = listParent.querySelector('.add-card-button');
+  cardButton.addEventListener('click', newCardClickHandler);
+  // console.log(cardButton);
+}
+
+function getListTemplate(listNum) {
+  return `
+  <div class="panel-heading"> <span class="list-title">New List ${listNum}</span> </div>
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <span class="caret"></span>
+        </button>
+    <ul class="dropdown-menu">
+      <li><a href="#">Delete List</a></li>
+    </ul>
+  </div>
+  <div class="panel-body">
+  <ul class="list-container">
+  </ul>
+  </div>
+  <div class="panel-footer"><button class="add-card-button">Add a card</button></div>
+`;
+}
+
+function addListenerToButtons() {
+  let cardButtonString = document.querySelectorAll('.add-card-button');
+  // console.log(cardButtonString);
+
+  for (const button of cardButtonString) {
+    button.addEventListener('click', newCardClickHandler);
+    // console.info('should see a button', button);
+  }
+}
+
+function addCard(container, data) {
+  let newLi = document.createElement('li');
+  newLi.className = 'panel-body';
+
+  if (typeof data !== 'undefined') {
+    let membersArray = data.members;
+    newLi.textContent = data.text;
+    let cardId = data.id;
+    newLi.setAttribute('data-id', cardId);
+    let teamatesInitialContainer = document.createElement('div');
+    teamatesInitialContainer.className = 'initials-container-position';
+
+    for (const member of membersArray) {
+      // console.info('span with names', member);
+      let teamatesInitialsSpan = document.createElement('span');
+      teamatesInitialsSpan.className = 'label label-primary initials';
+      teamatesInitialsSpan.setAttribute('title', member);
+      teamatesInitialContainer.appendChild(teamatesInitialsSpan);
+
+      let membersArrayBySpaces = member.split(' ');
+      // console.info(membersArrayBySpaces);
+      // from full name takes each name and puts it in the array
+      let initials = '';
+
+      for (const name of membersArrayBySpaces) {
+        let firstLetter = name.charAt(0);
+        // will bring the first letter of each name
+        // console.info('firstLetter', firstLetter);
+        initials += firstLetter;
+        // initials = initials + firstLetter every iteration
+      }
+      // console.info(initials);
+      teamatesInitialsSpan.textContent = initials;
+      // console.info('members splits more', membersArrayBySpaces);
+      newLi.appendChild(teamatesInitialContainer);
+    }
+  }
+
+  else {
+    // adding an example string.
+    newLi.textContent = 'Add new task';
+    newLi.setAttribute('data-id', uuid());
+  }
+
+  let btnEdit = document.createElement('button');
+  btnEdit.className = ('btn btn-info btn-xs edit-card');
+  btnEdit.textContent = 'Edit card';
+
+  newLi.appendChild(btnEdit);
+  // console.log(newLi);
+  container.appendChild(newLi);
+
+  btnEdit.addEventListener('click', (e) => {
+    let target = e.target;
+    // console.info(target);
+    const modal = document.querySelector('.wrapper-edit');
+    // console.info('this is the modal', modal);
+    let closeModalX = document.querySelector('.modal-header > button > span');
+
+    let closeModalButton = document.querySelector('.modal-footer > button');
+
+    if (modal.style.display === 'none') {
+      modal.style.display = 'block';
+
+      closeModalX.addEventListener('click', (event) => {
+        let target = event.target;
+        if (modal.style.display === 'block') {
+          modal.style.display = 'none';
+        }
+      });
+      closeModalButton.addEventListener('click', (event) => {
+        let target = event.target;
+        if (modal.style.display === 'block') {
+          modal.style.display = 'none';
+        }
+      });
+    }
+  })
+}
+
+// catch all the arrow buttons (divs)
+
+let subMenuButtons = document.querySelectorAll('.dropdown');
+// console.info(subMenuButtons);
+
+// apply event listener to every arrow button
+
+for (const button of subMenuButtons) {
+  // console.info(button);
+  // putting display = none on all the button list to initialize it
+  makeButtonSupportRemoveList(button)
+}
 
 // ===============================================
-
-// for now will hide the main to work on members ui
-
-// membersButton.addEventListener('click', (e) => {
-//   membersButton.className = 'active members';
-//   boardButton.className = 'board';
-// });
-
 const membersTemplateWrapper = `
   <span class="members-header">Taskboard Members</span>
   <ul class="list-group col-sm-8 members-list">`;
@@ -444,49 +500,6 @@ const addListTemplate = `<div class="wrapper">
   </div>`;
 
 let mainEle = document.querySelector('main');
-
-function drawBoardScreen() {
-  mainEle.innerHTML = addListTemplate;
-  let addListButton = document.querySelector('#add-list');
-
-  addListButton.addEventListener('click', (e) => {
-      createList();
-
-      let listAmount = appData.lists.length;
-
-      const newList = {
-        title: `New List ${listAmount}`,
-        tasks: []
-      };
-      appData.lists.push(newList);
-    }
-  )
-}
-
-function drawMembersScreen() {
-  createMembers();
-}
-
-function createMembers() {
-  let membersDiv = document.createElement('div');
-  membersDiv.className = 'list-group col-sm-8 members-fix';
-  membersDiv.innerHTML = membersTemplateWrapper;
-  let membersUl = membersDiv.querySelector('div.members-fix ul.members-list');
-  for (let member of appData.members) {
-    let membersLi = document.createElement('li');
-    membersLi.className = 'list-group-item';
-    membersLi.innerHTML = membersTemplate;
-    let spanInLiMembers = document.createElement('span');
-    spanInLiMembers.className = 'reset-span';
-    spanInLiMembers.textContent = member.name;
-    membersLi.appendChild(spanInLiMembers);
-    membersUl.appendChild(membersLi);
-  }
-
-  let convertMembersToString = membersDiv.outerHTML;
-
-  mainEle.innerHTML = convertMembersToString;
-}
 
 function isTabActive() {
   let hashWindow = window.location.hash;
@@ -525,8 +538,6 @@ function manageEditMode() {
   const editButtonMembers = document.querySelectorAll('.align-members-buttons button:not(.save-data)');
 
   const editButtonMembersSaveData = document.querySelectorAll('.align-members-buttons button.save-data');
-// console.info(editButtonMembers);
-  // console.info(editButtonMembersSaveData);
 
   for (const btn of editButtonMembers) {
     btn.addEventListener('click', (e) => {
@@ -537,13 +548,13 @@ function manageEditMode() {
       inputMembers.value = spanInLi.textContent;
       liParent.classList.toggle('edit-mode');
       console.info(target);
-console.info(liParent);
+      console.info(liParent);
       // trying to switch the span with the input when clicking save
 
       for (const btnSave of editButtonMembersSaveData) {
         btnSave.addEventListener('click', (e) => {
           spanInLi.textContent = inputMembers.value;
-          liParent.classList.toggle('edit-mode');
+          liParent.classList.remove('edit-mode');
         })
       }
     });
@@ -559,7 +570,6 @@ jsonMembersReq();
 
 
 // Polys
-
 
 // find Poly
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -606,3 +616,5 @@ if (!Array.prototype.find) {
     }
   });
 }
+
+
