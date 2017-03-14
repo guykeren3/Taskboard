@@ -284,7 +284,6 @@ function createMembers() {
   let inputMember = form.querySelector('input.input-fix-members');
 
   addMemberButton.addEventListener('click', (e) => {
-    console.info(e.target);
     const addButton = e.target;
     let newMember = {
       id: uuid(),
@@ -292,7 +291,6 @@ function createMembers() {
     };
 
     appData.members.push(newMember);
-    console.info(appData.members);
     creatingMemberFromData(membersUl, newMember);
   });
 
@@ -305,6 +303,8 @@ function creatingMemberFromData(listParent, member) {
   let memberName = member.name;
   let membersLi = document.createElement('li');
   membersLi.className = 'list-group-item';
+  membersLi.setAttribute('data-member-id', member.id);
+
   membersLi.innerHTML = membersTemplate;
   let spanInLiMembers = document.createElement('span');
   spanInLiMembers.className = 'reset-span';
@@ -577,6 +577,10 @@ function manageEditMode() {
       for (const btnSave of editButtonMembersSaveData) {
         btnSave.addEventListener('click', (e) => {
           spanInLi.textContent = inputMembers.value;
+
+
+
+          console.info(appData.members);
           liParent.classList.remove('edit-mode');
         })
       }
