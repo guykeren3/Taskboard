@@ -263,37 +263,60 @@ function createMembers() {
   membersDiv.className = 'list-group col-sm-8 members-fix';
   membersDiv.innerHTML = membersTemplateWrapper;
   let membersUl = membersDiv.querySelector('div.members-fix ul.members-list');
-  for (let member of appData.members) {
-    let membersLi = document.createElement('li');
-    membersLi.className = 'list-group-item';
-    membersLi.innerHTML = membersTemplate;
-    let spanInLiMembers = document.createElement('span');
-    spanInLiMembers.className = 'reset-span';
-    spanInLiMembers.textContent = member.name;
-    membersLi.appendChild(spanInLiMembers);
-    membersUl.appendChild(membersLi);
-  }
 
   //creating a div to push the add new member input into the ul.
-
+  let createMembersLiContainer = document.createElement('li');
+  createMembersLiContainer.style.listStyle = 'none';
   let createMembersDivContainer = document.createElement('div');
   createMembersDivContainer.innerHTML = membersTemplateAddMember;
-  membersUl.appendChild(createMembersDivContainer);
+  createMembersLiContainer.appendChild(createMembersDivContainer);
+  membersUl.appendChild(createMembersLiContainer);
+
+  for (let member of appData.members) {
+    creatingMemberFromData(membersUl, member)
+  }
+
 
   //need to work on event listener here for the input members
   let addMemberButton = createMembersDivContainer.querySelector('.members-page-form button');
-  // console.info(addMemberButton);
   // will add event listener on addMemberButton to add members to appData
+  let form = addMemberButton.closest('form.input-members');
+  let inputMember = form.querySelector('input.input-fix-members');
 
   addMemberButton.addEventListener('click', (e) => {
     console.info(e.target);
     const addButton = e.target;
-    // console.info(addButton);
+    let newMember = {
+      id: uuid(),
+      name: inputMember.value //brings the input value into name
+    };
+
+    appData.members.push(newMember);
+    console.info(appData.members);
+    creatingMemberFromData(membersUl, newMember);
   });
 
-  let convertMembersToString = membersDiv.outerHTML;
+  mainEle.innerHTML = '';
+  mainEle.appendChild(membersDiv);
+}
 
-  mainEle.innerHTML = convertMembersToString;
+
+function creatingMemberFromData(listParent, member) {
+  let memberName = member.name;
+  let membersLi = document.createElement('li');
+  membersLi.className = 'list-group-item';
+  membersLi.innerHTML = membersTemplate;
+  let spanInLiMembers = document.createElement('span');
+  spanInLiMembers.className = 'reset-span';
+  spanInLiMembers.textContent = memberName;
+  membersLi.appendChild(spanInLiMembers);
+
+  //catching the input parent and inserting the other li's beforehand
+
+  let inputMember = listParent.querySelector('input.input-fix-members');
+  let inputLiContainer = inputMember.closest('ul.members-list > li');
+  listParent.appendChild(membersLi);
+  listParent.insertBefore(membersLi, inputLiContainer);
 }
 
 function createList(data) {
