@@ -467,15 +467,26 @@ function addCard(container, data) {
 
   btnEdit.addEventListener('click', (e) => {
     let target = e.target;
-    // console.info(target);
+
+    //fetching the card related to the btnEdit we clicked
+    let liParentOfEdit = target.closest('li');
+
+    //getting the id attribute from the li of the edit card button
+    let liParentOfEditId = liParentOfEdit.getAttribute('data-id');
+
+    console.info(liParentOfEditId);
+    console.info(appData);
+
     const modal = document.querySelector('.wrapper-edit');
-    // console.info('this is the modal', modal);
-    let closeModalX = document.querySelector('.modal-header > button > span');
 
-    let closeModalButton = document.querySelector('.modal-footer > button');
+    //adding the li id of the editBtn we clicked to the modal to connect the two
+    modal.setAttribute('data-id', liParentOfEditId);
 
+    
     if (modal.style.display === 'none') {
       modal.style.display = 'block';
+
+      let closeModalX = document.querySelector('.modal-header > button > span');
 
       closeModalX.addEventListener('click', (event) => {
         let target = event.target;
@@ -483,6 +494,9 @@ function addCard(container, data) {
           modal.style.display = 'none';
         }
       });
+
+      let closeModalButton = document.querySelector('.modal-footer > button');
+
       closeModalButton.addEventListener('click', (event) => {
         let target = event.target;
         if (modal.style.display === 'block') {
