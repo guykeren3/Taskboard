@@ -28,6 +28,19 @@ function updateDataWithEmptyList() {
   appData.lists.push(newList);
 }
 
+
+function addMemberData(member){
+  appData.members.push(member);
+}
+
+function removeMemberData(li) {
+  appData.members.forEach((member, index) => {
+    if (member.id === li.getAttribute('data-member-id')) {
+      appData.members.splice(index, 1);
+    }
+  });
+}
+
 function addEmptyCardToData(myData, title) {
 
   // running find on the appData to compare between my title and the appData title and then pushing the card into the correct list in appData.
@@ -279,25 +292,28 @@ function createMembers() {
 
   //need to work on event listener here for the input members
   let addMemberButton = createMembersDivContainer.querySelector('.members-page-form button');
-  // will add event listener on addMemberButton to add members to appData
+  // adding listener on addMemberButton to add members to appData
   let form = addMemberButton.closest('form.input-members');
   let inputMember = form.querySelector('input.input-fix-members');
 
   addMemberButton.addEventListener('click', (e) => {
-    const addButton = e.target;
+    //creating new member
     let newMember = {
       id: uuid(),
       name: inputMember.value //brings the input value into name
     };
 
-    appData.members.push(newMember);
+    //reseting the input value after adding a new member
+    inputMember.value = '';
+
+    //adding the member to the appData members section
+    addMemberData(newMember);
     creatingMemberFromData(membersUl, newMember);
   });
 
   mainEle.innerHTML = '';
   mainEle.appendChild(membersDiv);
 }
-
 
 function creatingMemberFromData(listParent, member) {
   let memberName = member.name;
@@ -317,6 +333,7 @@ function creatingMemberFromData(listParent, member) {
   let inputLiContainer = inputMember.closest('ul.members-list > li');
   listParent.appendChild(membersLi);
   listParent.insertBefore(membersLi, inputLiContainer);
+  manageEditMode();
 }
 
 function createList(data) {
@@ -501,7 +518,7 @@ const membersTemplate = `<form class="members-page-form normal-mode">
         <button type="button"
                 class="btn btn-info btn-sm none-edit">Edit
         </button>
-        <button type="button" class="btn btn-danger btn-sm none-edit">Delete</button>
+        <button type="button" class="btn btn-danger btn-sm none-edit delete-member">Delete</button>
         <button type="button" class="btn btn-default btn-sm edit-buttons">Cancel</button>
         <button type="button" class="btn btn-success btn-sm edit-buttons save-data">Save</button>
       </div>
@@ -537,7 +554,6 @@ function isTabActive() {
 }
 
 function intialListByHashtag() {
-  console.info('Should Run Once if loaded both jsons and then intialized');
   let hashWindow = window.location.hash;
 
   if (hashWindow !== '') {
@@ -562,6 +578,8 @@ function manageEditMode() {
 
   const editButtonMembersSaveData = document.querySelectorAll('.align-members-buttons button.save-data');
 
+  const editButtonMemberDelete = document.querySelectorAll('.align-members-buttons button.delete-member');
+
   for (const btn of editButtonMembers) {
     btn.addEventListener('click', (e) => {
       let target = e.target;
@@ -570,24 +588,40 @@ function manageEditMode() {
       let inputMembers = liParent.querySelector('input');
       inputMembers.value = spanInLi.textContent;
       liParent.classList.toggle('edit-mode');
-      console.info(target);
-      console.info(liParent);
+      // console.info(target);
+      // console.info(liParent);
       // trying to switch the span with the input when clicking save
 
       for (const btnSave of editButtonMembersSaveData) {
         btnSave.addEventListener('click', (e) => {
           spanInLi.textContent = inputMembers.value;
 
-
-
-          console.info(appData.members);
+          for (let member of appData.members) {
+            // console.info(member);
+            if (member.id === liParent.getAttribute('data-member-id')) {
+              member.name = spanInLi.textContent;
+            }
+          }
           liParent.classList.remove('edit-mode');
         })
       }
-    });
+    })
   }
-}
 
+  // Add listeners to all delete buttons
+  editButtonMemberDelete.forEach((btnDelete, index) => {
+    btnDelete.addEventListener('click', (e) => {
+      let liParent = e.target.closest('li');
+      let liUlContainer = liParent.parentNode;
+
+      // Remove the member from the UI
+      liUlContainer.removeChild(liParent);
+
+      // Remove the member from appData
+      removeMemberData(liParent)
+    });
+  })
+}
 window.addEventListener('hashchange', (event) => {
   intialListByHashtag();
 });
