@@ -29,7 +29,7 @@ function updateDataWithEmptyList() {
 }
 
 
-function addMemberData(member){
+function addMemberData(member) {
   appData.members.push(member);
 }
 
@@ -41,6 +41,13 @@ function removeMemberData(li) {
   });
 }
 
+
+/**
+ *
+ * @param myData
+ * @param title
+ * @returns {{members: Array, text: string, id: *}}
+ */
 function addEmptyCardToData(myData, title) {
 
   // running find on the appData to compare between my title and the appData title and then pushing the card into the correct list in appData.
@@ -52,7 +59,11 @@ function addEmptyCardToData(myData, title) {
     text: 'Add new task',
     id: uuid()
   };
+
+  console.info(emptyCard);
   currentList.tasks.push(emptyCard);
+
+  return emptyCard;
 }
 
 /**
@@ -74,8 +85,8 @@ function newCardClickHandler(event) {
   let divParentOfLi = target.closest('.panel.panel-default');
   let liTitle = divParentOfLi.querySelector('span.list-title').textContent;
 
-  addEmptyCardToData(appData, liTitle);
-  addCard(divUl);
+  const emptyCard = addEmptyCardToData(appData, liTitle);
+  addCard(divUl, emptyCard);
 }
 
 // event listeners on title function
@@ -416,8 +427,7 @@ function addListenerToButtons() {
 function addCard(container, data) {
   let newLi = document.createElement('li');
   newLi.className = 'panel-body';
-
-  if (typeof data !== 'undefined') {
+  
     let membersArray = data.members;
     newLi.textContent = data.text;
     let cardId = data.id;
@@ -449,13 +459,7 @@ function addCard(container, data) {
       // console.info('members splits more', membersArrayBySpaces);
       newLi.appendChild(teamatesInitialContainer);
     }
-  }
 
-  else {
-    // adding an example string.
-    newLi.textContent = 'Add new task';
-    newLi.setAttribute('data-id', uuid());
-  }
 
   let btnEdit = document.createElement('button');
   btnEdit.className = ('btn btn-info btn-xs edit-card');
@@ -474,15 +478,34 @@ function addCard(container, data) {
     //getting the id attribute from the li of the edit card button
     let liParentOfEditId = liParentOfEdit.getAttribute('data-id');
 
-    console.info(liParentOfEditId);
-    console.info(appData);
 
     const modal = document.querySelector('.wrapper-edit');
 
     //adding the li id of the editBtn we clicked to the modal to connect the two
     modal.setAttribute('data-id', liParentOfEditId);
 
-    
+    console.info(modal);
+    console.info(liParentOfEditId);
+
+    //catching the text area in the modal
+    let cardText = document.getElementById('card-text');
+
+    /*
+    running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the      task text to the modal text area.
+    */
+
+    appData.lists.forEach((list, index) => {
+      list.tasks.forEach((task, index) => {
+        if (task.id === modal.getAttribute('data-id')) {
+          cardText.value = task.text;
+          console.info('found it!!');
+        }
+        else {
+
+        }
+      })
+    });
+
     if (modal.style.display === 'none') {
       modal.style.display = 'block';
 
