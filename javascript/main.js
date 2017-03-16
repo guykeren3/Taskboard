@@ -298,8 +298,7 @@ function createMembers() {
   for (let member of appData.members) {
     creatingMemberFromData(membersUl, member)
   }
-
-
+  
   //need to work on event listener here for the input members
   let addMemberButton = createMembersDivContainer.querySelector('.members-page-form button');
   // adding listener on addMemberButton to add members to appData
@@ -481,7 +480,7 @@ function addCard(container, data) {
     const modal = document.querySelector('.wrapper-edit');
 
     // working on modal checkboxes to be dynamic js and not hard coded:
-    // catching the div that wrapps the checkboxes
+    // catching the div that wraps the checkboxes
     // creating div's for each member in a loop
     // creating input and label for every member and pushing into the div
     const checkBoxContainer = document.getElementById('members');
@@ -489,19 +488,17 @@ function addCard(container, data) {
     appData.members.forEach((member, index) => {
       let memberInputContainer = document.createElement('div');
       memberInputContainer.className = 'checkbox';
-      let memberInputLabel = document.createElement('label');
-      let inputMember = document.createElement('input');
-      inputMember.setAttribute('type', 'checkbox');
-      inputMember.value = member.name;
+      let memberInputCheckBoxLabel = document.createElement('label');
+      let inputMemberCheckBox = document.createElement('input');
+      inputMemberCheckBox.setAttribute('type', 'checkbox');
+      inputMemberCheckBox.value = member.name;
       let spanInInput = document.createElement('span');
       spanInInput.textContent = member.name;
-      memberInputLabel.appendChild(inputMember);
-      memberInputLabel.appendChild(spanInInput);
-      memberInputContainer.appendChild(memberInputLabel);
+      memberInputCheckBoxLabel.appendChild(inputMemberCheckBox);
+      memberInputCheckBoxLabel.appendChild(spanInInput);
+      memberInputContainer.appendChild(memberInputCheckBoxLabel);
       checkBoxContainer.appendChild(memberInputContainer);
     });
-
-
 
     //adding the li id of the editBtn we clicked to the modal to connect the two
     modal.setAttribute('data-id', liParentOfEditId);
