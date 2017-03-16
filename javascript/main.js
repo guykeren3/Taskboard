@@ -41,7 +41,6 @@ function removeMemberData(li) {
   });
 }
 
-
 /**
  *
  * @param myData
@@ -60,16 +59,16 @@ function addEmptyCardToData(myData, title) {
     id: uuid()
   };
 
-  console.info(emptyCard);
+  // console.info(emptyCard);
   currentList.tasks.push(emptyCard);
 
   return emptyCard;
 }
 
+
 /**
  View
  */
-
 
 function newCardClickHandler(event) {
   const target = event.target;
@@ -427,38 +426,38 @@ function addListenerToButtons() {
 function addCard(container, data) {
   let newLi = document.createElement('li');
   newLi.className = 'panel-body';
-  
-    let membersArray = data.members;
-    newLi.textContent = data.text;
-    let cardId = data.id;
-    newLi.setAttribute('data-id', cardId);
-    let teamatesInitialContainer = document.createElement('div');
-    teamatesInitialContainer.className = 'initials-container-position';
 
-    for (const member of membersArray) {
-      // console.info('span with names', member);
-      let teamatesInitialsSpan = document.createElement('span');
-      teamatesInitialsSpan.className = 'label label-primary initials';
-      teamatesInitialsSpan.setAttribute('title', member);
-      teamatesInitialContainer.appendChild(teamatesInitialsSpan);
+  let membersArray = data.members;
+  newLi.textContent = data.text;
+  let cardId = data.id;
+  newLi.setAttribute('data-id', cardId);
+  let teamatesInitialContainer = document.createElement('div');
+  teamatesInitialContainer.className = 'initials-container-position';
 
-      let membersArrayBySpaces = member.split(' ');
-      // console.info(membersArrayBySpaces);
-      // from full name takes each name and puts it in the array
-      let initials = '';
+  for (const member of membersArray) {
+    // console.info('span with names', member);
+    let teamatesInitialsSpan = document.createElement('span');
+    teamatesInitialsSpan.className = 'label label-primary initials';
+    teamatesInitialsSpan.setAttribute('title', member);
+    teamatesInitialContainer.appendChild(teamatesInitialsSpan);
 
-      for (const name of membersArrayBySpaces) {
-        let firstLetter = name.charAt(0);
-        // will bring the first letter of each name
-        // console.info('firstLetter', firstLetter);
-        initials += firstLetter;
-        // initials = initials + firstLetter every iteration
-      }
-      // console.info(initials);
-      teamatesInitialsSpan.textContent = initials;
-      // console.info('members splits more', membersArrayBySpaces);
-      newLi.appendChild(teamatesInitialContainer);
+    let membersArrayBySpaces = member.split(' ');
+    // console.info(membersArrayBySpaces);
+    // from full name takes each name and puts it in the array
+    let initials = '';
+
+    for (const name of membersArrayBySpaces) {
+      let firstLetter = name.charAt(0);
+      // will bring the first letter of each name
+      // console.info('firstLetter', firstLetter);
+      initials += firstLetter;
+      // initials = initials + firstLetter every iteration
     }
+    // console.info(initials);
+    teamatesInitialsSpan.textContent = initials;
+    // console.info('members splits more', membersArrayBySpaces);
+    newLi.appendChild(teamatesInitialContainer);
+  }
 
 
   let btnEdit = document.createElement('button');
@@ -481,30 +480,49 @@ function addCard(container, data) {
 
     const modal = document.querySelector('.wrapper-edit');
 
+    // working on modal checkboxes to be dynamic js and not hard coded:
+    // catching the div that wrapps the checkboxes
+    // creating div's for each member in a loop
+    // creating input and label for every member and pushing into the div
+    const checkBoxContainer = document.getElementById('members');
+    checkBoxContainer.innerHTML = '';
+    appData.members.forEach((member, index) => {
+      let memberInputContainer = document.createElement('div');
+      memberInputContainer.className = 'checkbox';
+      let memberInputLabel = document.createElement('label');
+      let inputMember = document.createElement('input');
+      inputMember.setAttribute('type', 'checkbox');
+      inputMember.value = member.name;
+      let spanInInput = document.createElement('span');
+      spanInInput.textContent = member.name;
+      memberInputLabel.appendChild(inputMember);
+      memberInputLabel.appendChild(spanInInput);
+      memberInputContainer.appendChild(memberInputLabel);
+      checkBoxContainer.appendChild(memberInputContainer);
+    });
+
+
+
     //adding the li id of the editBtn we clicked to the modal to connect the two
     modal.setAttribute('data-id', liParentOfEditId);
-
-    console.info(modal);
-    console.info(liParentOfEditId);
 
     //catching the text area in the modal
     let cardText = document.getElementById('card-text');
 
     /*
-    running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the      task text to the modal text area.
-    */
+     running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the      task text to the modal text area.
+     */
 
     appData.lists.forEach((list, index) => {
       list.tasks.forEach((task, index) => {
         if (task.id === modal.getAttribute('data-id')) {
           cardText.value = task.text;
-          console.info('found it!!');
         }
-        else {
-
-        }
-      })
+      });
     });
+
+    // updating the members according to appData
+
 
     if (modal.style.display === 'none') {
       modal.style.display = 'block';
