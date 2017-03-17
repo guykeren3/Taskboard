@@ -298,7 +298,7 @@ function createMembers() {
   for (let member of appData.members) {
     creatingMemberFromData(membersUl, member)
   }
-  
+
   //need to work on event listener here for the input members
   let addMemberButton = createMembersDivContainer.querySelector('.members-page-form button');
   // adding listener on addMemberButton to add members to appData
@@ -427,7 +427,7 @@ function addCard(container, data) {
   newLi.className = 'panel-body';
 
   let membersArray = data.members;
-  newLi.textContent = data.text;
+  newLi.innerHTML = `<span class="card-text"> ${data.text} </span>`;
   let cardId = data.id;
   newLi.setAttribute('data-id', cardId);
   let teamatesInitialContainer = document.createElement('div');
@@ -491,7 +491,7 @@ function addCard(container, data) {
       let memberInputCheckBoxLabel = document.createElement('label');
       let inputMemberCheckBox = document.createElement('input');
       inputMemberCheckBox.setAttribute('type', 'checkbox');
-      inputMemberCheckBox.value = member.name;
+      inputMemberCheckBox.value = member.id;
       let spanInInput = document.createElement('span');
       spanInInput.textContent = member.name;
       memberInputCheckBoxLabel.appendChild(inputMemberCheckBox);
