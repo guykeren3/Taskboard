@@ -220,7 +220,7 @@ function boardReqListener(event) {
 function jsonBoardReq() {
   const xhr = new XMLHttpRequest();
   xhr.addEventListener("load", boardReqListener);
-  xhr.open("GET", "assets/board.json");
+  xhr.open("GET", "assets/board-advanced.json");
   xhr.send();
 }
 
@@ -426,21 +426,27 @@ function addCard(container, data) {
   let newLi = document.createElement('li');
   newLi.className = 'panel-body';
 
-  let membersArray = data.members;
+  let membersArrayInAppData = data.members;
   newLi.innerHTML = `<span class="card-text"> ${data.text} </span>`;
   let cardId = data.id;
   newLi.setAttribute('data-id', cardId);
   let teamatesInitialContainer = document.createElement('div');
   teamatesInitialContainer.className = 'initials-container-position';
 
-  for (const member of membersArray) {
-    // console.info('span with names', member);
+  for (const memberIdInAppData of membersArrayInAppData) {
+
+// finding the id in the appData members and connecting it to the member from the board-advanced AKA membersArray in the loop above.
+
+    const currentMember = appData.members.find(memberObject => memberObject.id === memberIdInAppData);
+
+    let memberNameIdLinked = currentMember.name;
+
     let teamatesInitialsSpan = document.createElement('span');
     teamatesInitialsSpan.className = 'label label-primary initials';
-    teamatesInitialsSpan.setAttribute('title', member);
+    teamatesInitialsSpan.setAttribute('title', memberNameIdLinked);
     teamatesInitialContainer.appendChild(teamatesInitialsSpan);
 
-    let membersArrayBySpaces = member.split(' ');
+    let membersArrayBySpaces = memberNameIdLinked.split(' ');
     // console.info(membersArrayBySpaces);
     // from full name takes each name and puts it in the array
     let initials = '';
