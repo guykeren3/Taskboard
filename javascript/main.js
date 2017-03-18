@@ -118,7 +118,6 @@ function handleListTitle(titleElm) {
     let input = document.createElement("input");
     input.type = "text";
     input.value = span.innerHTML;
-    input.size = Math.max(text.length / 4 * 3, 4);
     span.parentNode.insertBefore(input, span);
     input.focus();
 
@@ -321,12 +320,14 @@ function createMembers() {
   let form = addMemberButton.closest('form.input-members');
   let inputMember = form.querySelector('input.input-fix-members');
 
-  addMemberButton.addEventListener('click', (e) => {
+  addMemberForm.addEventListener('submit', (e) => {
     //creating new member
     let newMember = {
       id: uuid(),
       name: inputMember.value //brings the input value into name
     };
+
+    e.preventDefault();
 
     //reseting the input value after adding a new member
     inputMember.value = '';
@@ -540,8 +541,63 @@ function addCard(container, data) {
       });
     });
 
-    // updating the members according to appData
+    //catching the save btn and when clicking updating the card text.
 
+    let saveModalBtn = document.querySelector('.btn-save-modal');
+    //getting an array of the spans
+    let spanInCard = document.querySelectorAll('span.card-text');
+
+    //save button event listener
+
+    saveModalBtn.addEventListener('click', (e) => {
+      //running over the lists and catching the list
+      appData.lists.forEach((list, index) => {
+        //running over the lists tasks
+        list.tasks.forEach((task, index) => {
+          //comparing task id with modal id, if same update
+          if (task.id === modal.getAttribute('data-id')) {
+            //updating the card itself in appData with the modal changes
+            task.text = cardText.value;
+            //running over the spans and comparing the id to the modal if same updating the ui of the span.
+            spanInCard.forEach((span, index) => {
+              //getting the li of each span because the id is on him
+              let liParentOfSpan = span.closest('li');
+              //comparing the li id to tht modal id, if same update.
+              if (liParentOfSpan.getAttribute('data-id') === modal.getAttribute('data-id')) {
+                //updating the ui span with the task from the modal.
+                span.textContent = task.text;
+              }
+            });
+          }
+        });
+      });
+      if (modal.style.display === 'block') {
+        modal.style.display = 'none';
+      }
+    });
+
+    let deleteModalBtn = document.querySelector('.btn-delete-card');
+
+    deleteModalBtn.addEventListener('click', (e) => {
+
+      //removing the task from the appData
+      appData.lists.forEach((list, index) => {
+        list.tasks.forEach((task, indexOfTask) => {
+          if (task.id === modal.getAttribute('data-id')) {
+            let currentTask = task.id;
+            list.tasks.splice(indexOfTask, 1);
+          }
+        });
+      });
+
+      //removing the card from the ui when hitting delete in modal
+      liParentOfEdit.remove();
+
+      //closing the modal window
+      if (modal.style.display === 'block') {
+        modal.style.display = 'none';
+      }
+    });
 
     if (modal.style.display === 'none') {
       modal.style.display = 'block';
@@ -600,7 +656,7 @@ const membersTemplate = `<form class="members-page-form normal-mode">
 const membersTemplateAddMember = `<li class="list-group-item">
       <form class="members-page-form input-members">
         <input type="text" class="form-control input-fix-members" placeholder="Add new member">
-        <button type="button" class="btn btn-primary">Add</button>
+        <button type="submit" class="btn btn-primary">Add</button>
       </form>
     </li>
   </ul>
@@ -696,6 +752,7 @@ function manageEditMode() {
     });
   })
 }
+
 window.addEventListener('hashchange', (event) => {
   intialListByHashtag();
 });
