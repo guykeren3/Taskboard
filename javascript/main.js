@@ -34,12 +34,27 @@ function addMemberData(member) {
 }
 
 function removeMemberData(li) {
+  //finding the id in members and comparing to the li with the same id to remove when clicking delete.
   appData.members.forEach((member, index) => {
     if (member.id === li.getAttribute('data-member-id')) {
+      let memberToRemove = member.id; //saving the id we are removing for later use to remove it from the tasks in lists as well
       appData.members.splice(index, 1);
+
+      // finding the id we removed and comparing to the ids in the task, if same remove that id from the task itself with the index and splice
+
+      appData.lists.forEach((list, indexOfList) => {
+        list.tasks.forEach((task, indexOfTask) => {
+          task.members.forEach((id, indexOfId) => {
+            if (id === memberToRemove) {
+              task.members.splice(indexOfId, 1);
+            }
+          })
+        })
+      })
     }
   });
 }
+
 
 /**
  *
@@ -299,6 +314,7 @@ function createMembers() {
     creatingMemberFromData(membersUl, member)
   }
 
+  let addMemberForm = createMembersDivContainer.querySelector('form.input-members');
   //need to work on event listener here for the input members
   let addMemberButton = createMembersDivContainer.querySelector('.members-page-form button');
   // adding listener on addMemberButton to add members to appData
@@ -426,18 +442,18 @@ function addCard(container, data) {
   let newLi = document.createElement('li');
   newLi.className = 'panel-body';
 
-  let membersArrayInAppData = data.members;
+  let membersArrayInTasksAppData = data.members;
   newLi.innerHTML = `<span class="card-text"> ${data.text} </span>`;
   let cardId = data.id;
   newLi.setAttribute('data-id', cardId);
   let teamatesInitialContainer = document.createElement('div');
   teamatesInitialContainer.className = 'initials-container-position';
 
-  for (const memberIdInAppData of membersArrayInAppData) {
-
+  for (const memberIdInTasksInAppData of membersArrayInTasksAppData) {
+    // console.info(membersArrayInTasksAppData);
 // finding the id in the appData members and connecting it to the member from the board-advanced AKA membersArray in the loop above.
 
-    const currentMember = appData.members.find(memberObject => memberObject.id === memberIdInAppData);
+    const currentMember = appData.members.find(memberObject => memberObject.id === memberIdInTasksInAppData);
 
     let memberNameIdLinked = currentMember.name;
 
