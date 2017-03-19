@@ -5,81 +5,9 @@
 /**
  Model
  */
-const appData = {
-  lists: [],
-  members: []
-};
-
-function updateDataBoard(jsonArray) {
-  appData.lists = jsonArray;
+function getListsFromData () {
+  return appData.lists;
 }
-
-function updateDataMembers(jsonArray) {
-  appData.members = jsonArray;
-}
-
-function updateDataWithEmptyList() {
-  let listAmount = appData.lists.length;
-
-  const newList = {
-    title: `New List ${listAmount}`,
-    tasks: []
-  };
-  appData.lists.push(newList);
-}
-
-
-function addMemberData(member) {
-  appData.members.push(member);
-}
-
-function removeMemberData(li) {
-  //finding the id in members and comparing to the li with the same id to remove when clicking delete.
-  appData.members.forEach((member, index) => {
-    if (member.id === li.getAttribute('data-member-id')) {
-      let memberToRemove = member.id; //saving the id we are removing for later use to remove it from the tasks in lists as well
-      appData.members.splice(index, 1);
-
-      // finding the id we removed and comparing to the ids in the task, if same remove that id from the task itself with the index and splice
-
-      appData.lists.forEach((list, indexOfList) => {
-        list.tasks.forEach((task, indexOfTask) => {
-          task.members.forEach((id, indexOfId) => {
-            if (id === memberToRemove) {
-              task.members.splice(indexOfId, 1);
-            }
-          })
-        })
-      })
-    }
-  });
-}
-
-
-/**
- *
- * @param myData
- * @param title
- * @returns {{members: Array, text: string, id: *}}
- */
-function addEmptyCardToData(myData, title) {
-
-  // running find on the appData to compare between my title and the appData title and then pushing the card into the correct list in appData.
-
-  const currentList = myData.lists.find((list) => title === list.title);
-
-  const emptyCard = {
-    members: [],
-    text: 'Add new task',
-    id: uuid()
-  };
-
-  // console.info(emptyCard);
-  currentList.tasks.push(emptyCard);
-
-  return emptyCard;
-}
-
 
 /**
  View
@@ -112,7 +40,7 @@ function handleListTitle(titleElm) {
     const span = e.target;
     span.style.display = 'none';
     let text = span.innerHTML;
-    const currentList = appData.lists.find((list) => text === list.title);
+    const currentList = getListsFromData().find((list) => text === list.title);
     // let currentListTitle = currentList.title;
     // console.info(currentListTitle);
     let input = document.createElement("input");
