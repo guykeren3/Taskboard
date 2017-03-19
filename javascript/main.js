@@ -3,13 +3,6 @@
  */
 
 /**
- Model
- */
-function getListsFromData () {
-  return appData.lists;
-}
-
-/**
  View
  */
 
@@ -36,13 +29,10 @@ function newCardClickHandler(event) {
 function handleListTitle(titleElm) {
   titleElm.addEventListener('click', (e) => {
 
-    // console.info(appData.lists);
     const span = e.target;
     span.style.display = 'none';
     let text = span.innerHTML;
     const currentList = getListsFromData().find((list) => text === list.title);
-    // let currentListTitle = currentList.title;
-    // console.info(currentListTitle);
     let input = document.createElement("input");
     input.type = "text";
     input.value = span.innerHTML;
@@ -53,9 +43,6 @@ function handleListTitle(titleElm) {
       const input = e.target;
       let inputText = input.value;
       if (input.value.trim() !== '') {
-        // console.log(inputText);
-        // const divHeading = input.parentNode;
-        // let updateSpan = divHeading.querySelector('span');
 
         // Update the span
         span.innerHTML = input.value;
@@ -81,11 +68,10 @@ function handleListTitle(titleElm) {
       let inputText = input.value;
       let inputParent = input.closest('.panel-heading');
       let titleSpanContent = inputParent.querySelector('span.list-title').textContent;
-      // console.info(titleSpanContent);
-      // console.info(appData.lists);
+
 
       if (e.keyCode === ENTER) {
-        const currentList = appData.lists.find((list) => titleSpanContent === list.title);
+        const currentList = getListsFromData().find((list) => titleSpanContent === list.title);
         currentList.title = input.value;
         e.target.blur();
       }
@@ -96,12 +82,12 @@ function handleListTitle(titleElm) {
 function makeButtonSupportRemoveList(button) {
 
   let ulInsideButton = button.querySelector('.dropdown-menu');
-  // console.info(ulInsideButton);
+
   ulInsideButton.style.display = 'none';
 
   button.addEventListener('click', (e) => {
     const button = e.target;
-    // console.info(button);
+
 // clicking on the arrow button turns the display ul to = block
     if (ulInsideButton.style.display === 'none') {
       ulInsideButton.style.display = 'block';
@@ -115,28 +101,26 @@ function makeButtonSupportRemoveList(button) {
   liInsideUlOfButtons.addEventListener('click', (e) => {
     const li = e.target;
     let divPanelPanelDefault = li.closest('.panel.panel-default');
-    // console.info(divPanelPanelDefault);
     let headerSpan = divPanelPanelDefault.querySelector('.panel-heading > span');
-    // console.info(headerSpan);
     let headerSpanText = headerSpan.textContent;
-    // let divHeader = divPanelPanelDefault.querySelector('span');
-    // console.info(divHeader);
+
+    //prompt window
     let result = window.confirm(`Deleting ${headerSpanText} list. Are you sure?`);
     if (result === true) {
+
+      //remove the list if user clicked yes ( true )
       divPanelPanelDefault.parentNode.removeChild(divPanelPanelDefault);
-      // console.info(appData.lists);
 
       let liTitle = headerSpanText;
-      //
 
       let indexCounter = 0;
 
-      appData.lists.forEach((list, index) => {
+      getListsFromData().forEach((list, index) => {
         if (list.title === liTitle) {
           indexCounter = index;
         }
       });
-      appData.lists.splice(indexCounter, 1);
+      getListsFromData().splice(indexCounter, 1);
     }
     else {
       ulInsideButton.style.display = 'none';
@@ -149,9 +133,7 @@ function makeButtonSupportRemoveList(button) {
 function boardReqListener(event) {
   const target = event.target;
   let listObject = JSON.parse(target.responseText);
-  // console.info(listObject);
   const boardArray = listObject.board;
-  // console.info('this is the board which is inside the json', boardArray);
   updateDataBoard(boardArray);
   // console.info(appData);
   if (isAllDataReady()) {
@@ -171,9 +153,7 @@ function jsonBoardReq() {
 function membersReqListener(event) {
   const target = event.target;
   let membersObject = JSON.parse(target.responseText);
-  // console.info(membersObject);
   const membersArray = membersObject.members;
-  // console.info('this is the board which is inside the json', boardArray);
 
   // update appData
   updateDataMembers(membersArray);
@@ -190,21 +170,9 @@ function jsonMembersReq() {
   xhr.send();
 }
 
-function isAllDataReady() {
-  if (appData.lists.length && appData.members.length) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
 function createListOfData() {
-  for (const list of appData.lists) {
-    // console.info('loop', list);
+  for (const list of getListsFromData()) {
     createList(list);
-    // let title = listObject[i].title;
-    // console.info(title);
   }
 }
 
@@ -237,7 +205,7 @@ function createMembers() {
   createMembersLiContainer.appendChild(createMembersDivContainer);
   membersUl.appendChild(createMembersLiContainer);
 
-  for (let member of appData.members) {
+  for (let member of getMembersFromData()) {
     creatingMemberFromData(membersUl, member)
   }
 
@@ -287,17 +255,19 @@ function creatingMemberFromData(listParent, member) {
   let inputLiContainer = inputMember.closest('ul.members-list > li');
   listParent.appendChild(membersLi);
   listParent.insertBefore(membersLi, inputLiContainer);
-  manageEditMode();
+
+  //giving the editMode function the membersLi as an argument to work only on him (the membersLi is created each time from line 209)
+  manageEditMode(membersLi);
 }
 
-function createList(data) {
+function createList(list) {
   // console.info('createList', data);
   let addListButton = document.querySelector('#add-list');
 //catching the main div to push the other divs into it
   const listParent = document.createElement('div');
   listParent.className = 'panel panel-default';
   listParent.setAttribute('data-id', uuid());
-  listParent.innerHTML = getListTemplate(appData.lists.length);
+  listParent.innerHTML = getListTemplate(getListsFromData().length);
   // console.info(data);
   let divWrapper = document.querySelector('.wrapper');
 
@@ -310,10 +280,10 @@ function createList(data) {
 // console.info(newListSpan);
 
   // gets the tasks text
-  if (typeof data !== 'undefined') {
-    let liName = data.title;
+  if (typeof list !== 'undefined') {
+    let liName = list.title;
     newListSpan.textContent = liName;   // enteres the object title as the list title
-    let liTasksArray = data.tasks;
+    let liTasksArray = list.tasks;
     // console.info('this is the tasks array', liTasksArray);
     for (const i in liTasksArray) {
       let cardData = liTasksArray[i];
@@ -357,32 +327,22 @@ function getListTemplate(listNum) {
 `;
 }
 
-function addListenerToButtons() {
-  let cardButtonString = document.querySelectorAll('.add-card-button');
-  // console.log(cardButtonString);
-
-  for (const button of cardButtonString) {
-    button.addEventListener('click', newCardClickHandler);
-    // console.info('should see a button', button);
-  }
-}
-
-function addCard(container, data) {
+function addCard(container, task) {
   let newLi = document.createElement('li');
   newLi.className = 'panel-body';
 
-  let membersArrayInTasksAppData = data.members;
-  newLi.innerHTML = `<span class="card-text"> ${data.text} </span>`;
-  let cardId = data.id;
+  let membersArrayInTasksAppData = task.members;
+  newLi.innerHTML = `<span class="card-text"> ${task.text} </span>`;
+  let cardId = task.id;
   newLi.setAttribute('data-id', cardId);
   let teamatesInitialContainer = document.createElement('div');
   teamatesInitialContainer.className = 'initials-container-position';
 
   for (const memberIdInTasksInAppData of membersArrayInTasksAppData) {
-    // console.info(membersArrayInTasksAppData);
+
 // finding the id in the appData members and connecting it to the member from the board-advanced AKA membersArray in the loop above.
 
-    const currentMember = appData.members.find(memberObject => memberObject.id === memberIdInTasksInAppData);
+    const currentMember = getMembersFromData().find(memberObject => memberObject.id === memberIdInTasksInAppData);
 
     let memberNameIdLinked = currentMember.name;
 
@@ -392,20 +352,17 @@ function addCard(container, data) {
     teamatesInitialContainer.appendChild(teamatesInitialsSpan);
 
     let membersArrayBySpaces = memberNameIdLinked.split(' ');
-    // console.info(membersArrayBySpaces);
+
     // from full name takes each name and puts it in the array
     let initials = '';
 
     for (const name of membersArrayBySpaces) {
       let firstLetter = name.charAt(0);
       // will bring the first letter of each name
-      // console.info('firstLetter', firstLetter);
       initials += firstLetter;
       // initials = initials + firstLetter every iteration
     }
-    // console.info(initials);
     teamatesInitialsSpan.textContent = initials;
-    // console.info('members splits more', membersArrayBySpaces);
     newLi.appendChild(teamatesInitialContainer);
   }
 
@@ -443,7 +400,7 @@ function addCard(container, data) {
     //find the task
     let currentTask = {};
 
-    appData.lists.forEach((list, indexOfList) => {
+    getListsFromData().forEach((list, indexOfList) => {
       for (let task of list.tasks) {
         if (task.id === modal.getAttribute('data-id')) {
           //if array is empty no members checked
@@ -456,7 +413,7 @@ function addCard(container, data) {
 
     //creating the members checkBoxes in the modal
 
-    appData.members.forEach((member, index) => {
+    getMembersFromData().forEach((member, index) => {
       let memberInputContainer = document.createElement('div');
       memberInputContainer.className = 'checkbox';
 
@@ -488,7 +445,7 @@ function addCard(container, data) {
      running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the      task text to the modal text area.
      */
 
-    appData.lists.forEach((list, index) => {
+    getListsFromData().forEach((list, index) => {
       list.tasks.forEach((task, index) => {
         if (task.id === modal.getAttribute('data-id')) {
           cardText.value = task.text;
@@ -506,7 +463,7 @@ function addCard(container, data) {
 
     saveModalBtn.addEventListener('click', (e) => {
       //running over the lists and catching the list
-      appData.lists.forEach((list, index) => {
+      getListsFromData().forEach((list, index) => {
         //running over the lists tasks
         list.tasks.forEach((task, index) => {
           //comparing task id with modal id, if same update
@@ -531,7 +488,7 @@ function addCard(container, data) {
 
       //getting the id's of the inputs that are checked and pushing to a new array
 
-      appData.lists.forEach((list, indexOfList) => {
+      getListsFromData().forEach((list, indexOfList) => {
         for (let task of list.tasks) {
           if (task.id === modal.getAttribute('data-id')) {
             //if array is empty no members checked
@@ -563,7 +520,7 @@ function addCard(container, data) {
     deleteModalBtn.addEventListener('click', (e) => {
 
       //removing the task from the appData
-      appData.lists.forEach((list, index) => {
+      getListsFromData().forEach((list, index) => {
         list.tasks.forEach((task, indexOfTask) => {
           if (task.id === modal.getAttribute('data-id')) {
             let currentTask = task.id;
@@ -613,7 +570,6 @@ let subMenuButtons = document.querySelectorAll('.dropdown');
 // apply event listener to every arrow button
 
 for (const button of subMenuButtons) {
-  // console.info(button);
   // putting display = none on all the button list to initialize it
   makeButtonSupportRemoveList(button)
 }
@@ -685,63 +641,71 @@ function intialListByHashtag() {
   }
 }
 
-function manageEditMode() {
-  const editButtonMembers = document.querySelectorAll('.align-members-buttons button:not(.save-data)');
+function manageEditMode(currentLi) {
 
-  const editButtonMembersSaveData = document.querySelectorAll('.align-members-buttons button.save-data');
+  // because the function is called elsewhere without an argument gotta do an if for the case of currentLi === undefined
 
-  const editButtonMemberDelete = document.querySelectorAll('.align-members-buttons button.delete-member');
+  if (typeof currentLi !== 'undefined') {
 
-  for (const btn of editButtonMembers) {
-    btn.addEventListener('click', (e) => {
+    /*before fixing the function (had a bug) caught all the buttons and did loops on them and added event listneres on each. now improved the function by giving it the li that holds all the buttons as an argument, the li is given by an earlier function that creates each list according to the appData. */
+
+    const editButtonMembers = currentLi.querySelector('.align-members-buttons button:not(.save-data)');
+
+    const editButtonMembersSaveData = currentLi.querySelector('.align-members-buttons button.save-data');
+
+    const editButtonMemberDelete = currentLi.querySelector('.align-members-buttons .delete-member');
+    console.info(editButtonMemberDelete);
+
+    editButtonMembers.addEventListener('click', (e) => {
       let target = e.target;
-      let liParent = target.closest('li');
-      let spanInLi = liParent.querySelector('.reset-span');
-      let inputMembers = liParent.querySelector('input');
+      let spanInLi = currentLi.querySelector('.reset-span');
+      let inputMembers = currentLi.querySelector('input');
       inputMembers.value = spanInLi.textContent;
-      liParent.classList.toggle('edit-mode');
-      // console.info(target);
-      // console.info(liParent);
+      currentLi.classList.toggle('edit-mode');
       // trying to switch the span with the input when clicking save
+      editButtonMembersSaveData.addEventListener('click', (e) => {
+        spanInLi.textContent = inputMembers.value;
 
-      for (const btnSave of editButtonMembersSaveData) {
-        btnSave.addEventListener('click', (e) => {
-          spanInLi.textContent = inputMembers.value;
-
-          for (let member of appData.members) {
-            // console.info(member);
-            if (member.id === liParent.getAttribute('data-member-id')) {
-              member.name = spanInLi.textContent;
-            }
+        for (let member of getMembersFromData()) {
+          if (member.id === currentLi.getAttribute('data-member-id')) {
+            member.name = spanInLi.textContent;
           }
-          liParent.classList.remove('edit-mode');
-        })
-      }
-    })
-  }
-
-  // Add listeners to all delete buttons
-  editButtonMemberDelete.forEach((btnDelete, index) => {
-    btnDelete.addEventListener('click', (e) => {
-      let liParent = e.target.closest('li');
-      let liUlContainer = liParent.parentNode;
-
+          currentLi.classList.remove('edit-mode');
+        }
+      });
+    });
+    // Add listeners to delete button
+    editButtonMemberDelete.addEventListener('click', (e) => {
       // Remove the member from the UI
-      liUlContainer.removeChild(liParent);
+      currentLi.remove();
 
       // Remove the member from appData
-      removeMemberData(liParent)
+      removeMemberData(currentLi)
     });
-  })
+  }
 }
-
 window.addEventListener('hashchange', (event) => {
   intialListByHashtag();
 });
 
-jsonBoardReq();
-jsonMembersReq();
 
+// check if local storage is not empty
+// if not empty check if the appData inside it is not empty as well
+// if so, load from appData and call intialByHash function
+// if not, load the JSONS as usual
+
+// localStorage.setItem('appData', JSON.stringify(appData)
+
+if (window.localStorage.length !== 0) {
+  pullFromStorage();
+  intialListByHashtag();
+  console.info('Loaded from local storage');
+}
+else {
+  jsonBoardReq();
+  jsonMembersReq();
+  console.info('Loaded from JSON');
+}
 
 // Polys
 
