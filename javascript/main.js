@@ -598,6 +598,33 @@ function addCard(container, data) {
           }
         });
       });
+
+      //working on replacing the checked names in the cards
+
+      //getting the id's of the inputs that are checked and pushing to a new array
+
+      appData.lists.forEach((list, indexOfList) => {
+        for (let task of list.tasks) {
+          if (task.id === modal.getAttribute('data-id')) {
+            //if array is empty no members checked
+            currentTask = task;
+            //toDo: we found the task we should break the loop
+            break;
+          }
+        }
+      });
+
+      let membersArrayChecked = [];
+      let checkBoxes = document.querySelectorAll('div.checkbox input');
+
+      checkBoxes.forEach((checkBox, indexOfCheckBox) => {
+        if (checkBox.checked === true) {
+          membersArrayChecked.push(checkBox.value);
+        }
+      });
+      currentTask.members = membersArrayChecked;
+      intialListByHashtag();
+
       if (modal.style.display === 'block') {
         modal.style.display = 'none';
       }
