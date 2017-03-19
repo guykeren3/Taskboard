@@ -502,29 +502,56 @@ function addCard(container, data) {
 
     const modal = document.querySelector('.wrapper-edit');
 
+    //adding the li id of the editBtn we clicked to the modal to connect the two
+    modal.setAttribute('data-id', liParentOfEditId);
+
     // working on modal checkboxes to be dynamic js and not hard coded:
     // catching the div that wraps the checkboxes
     // creating div's for each member in a loop
     // creating input and label for every member and pushing into the div
     const checkBoxContainer = document.getElementById('members');
     checkBoxContainer.innerHTML = '';
+
+    //find the task
+    let currentTask = {};
+
+    appData.lists.forEach((list, indexOfList) => {
+      for (let task of list.tasks) {
+        if (task.id === modal.getAttribute('data-id')) {
+          //if array is empty no members checked
+          currentTask = task;
+          //toDo: we found the task we should break the loop
+          break;
+        }
+      }
+    });
+
+    //creating the members checkBoxes in the modal
+
     appData.members.forEach((member, index) => {
       let memberInputContainer = document.createElement('div');
       memberInputContainer.className = 'checkbox';
+
       let memberInputCheckBoxLabel = document.createElement('label');
       let inputMemberCheckBox = document.createElement('input');
       inputMemberCheckBox.setAttribute('type', 'checkbox');
+
       inputMemberCheckBox.value = member.id;
+
       let spanInInput = document.createElement('span');
       spanInInput.textContent = member.name;
+
+      /* comparing the task members and members id in appData, if it exists ( through indexOf check ) check the checkbox, if not, keep going and leave it empty. */
+
+      if (currentTask.members.indexOf(member.id) !== -1) {
+        inputMemberCheckBox.checked = true;
+      }
+
       memberInputCheckBoxLabel.appendChild(inputMemberCheckBox);
       memberInputCheckBoxLabel.appendChild(spanInInput);
       memberInputContainer.appendChild(memberInputCheckBoxLabel);
       checkBoxContainer.appendChild(memberInputContainer);
     });
-
-    //adding the li id of the editBtn we clicked to the modal to connect the two
-    modal.setAttribute('data-id', liParentOfEditId);
 
     //catching the text area in the modal
     let cardText = document.getElementById('card-text');
