@@ -481,20 +481,31 @@ function addCard(container, task) {
     //catching the text area in the modal
     let cardText = document.getElementById('card-text');
 
-    /*
-     running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the      task text to the modal text area.
-     */
+
+    // catching the titles select container
+
     let moveToTitlesInModalContainer = document.getElementById('move-to');
+
+    /* emptying the select each time edit button is clicked on the modal because if not, each time the we will click the same lists will be added to the move to. */
+
+    moveToTitlesInModalContainer.innerHTML = '';
 
     getListsFromData().forEach((list, index) => {
       let moveToTitlesOptions = document.createElement('option');
       moveToTitlesOptions.textContent = list.title;
-      moveToTitlesInModalContainer.appendChild(moveToTitlesOptions);
+
+      /*
+       running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the      task text to the modal text area.
+       */
+
       list.tasks.forEach((task, index) => {
         if (task.id === modal.getAttribute('data-id')) {
           cardText.value = task.text;
         }
       });
+
+      // pushing the titles options to the select container
+      moveToTitlesInModalContainer.appendChild(moveToTitlesOptions);
     });
 
     //catching the save btn and when clicking updating the card text.
