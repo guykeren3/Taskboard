@@ -481,7 +481,6 @@ function addCard(container, task) {
     //catching the text area in the modal
     let cardText = document.getElementById('card-text');
 
-
     // catching the titles select container
 
     let moveToTitlesInModalContainer = document.getElementById('move-to');
@@ -493,17 +492,14 @@ function addCard(container, task) {
     getListsFromData().forEach((list, index) => {
       let moveToTitlesOptions = document.createElement('option');
       moveToTitlesOptions.textContent = list.title;
-
       /*
-       running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the      task text to the modal text area.
+       running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the task text to the modal text area.
        */
-
       list.tasks.forEach((task, index) => {
         if (task.id === modal.getAttribute('data-id')) {
           cardText.value = task.text;
         }
       });
-
       // pushing the titles options to the select container
       moveToTitlesInModalContainer.appendChild(moveToTitlesOptions);
     });
