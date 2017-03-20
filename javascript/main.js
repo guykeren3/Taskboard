@@ -6,6 +6,42 @@
  View
  */
 
+/*=====================================================================
+ Templates
+ //===================================================================*/
+
+const membersTemplateWrapper = `
+  <span class="members-header">Taskboard Members</span>
+  <ul class="list-group col-sm-8 members-list">`;
+
+const membersTemplate = `<form class="members-page-form normal-mode">
+        <input type="text" class="form-control edit-input" placeholder="Current">
+      </form>
+      <div class="align-members-buttons">
+        <button type="button"
+                class="btn btn-info btn-sm none-edit">Edit
+        </button>
+        <button type="button" class="btn btn-danger btn-sm none-edit delete-member">Delete</button>
+        <button type="button" class="btn btn-default btn-sm edit-buttons">Cancel</button>
+        <button type="button" class="btn btn-success btn-sm edit-buttons save-data">Save</button>
+      </div>
+    </li>`;
+const membersTemplateAddMember = `<li class="list-group-item">
+      <form class="members-page-form input-members">
+        <input type="text" class="form-control input-fix-members" placeholder="Add new member">
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+    </li>
+  </ul>
+</div>`;
+const addListTemplate = `<div class="wrapper">
+    <button class="btn add-list-btn" id="add-list"> Add a list...</button>
+  </div>`;
+
+/*=====================================================================
+ Feature related functions
+ //===================================================================*/
+
 function newCardClickHandler(event) {
   const target = event.target;
   // console.info(target);
@@ -177,6 +213,7 @@ function createListOfData() {
 }
 
 function drawBoardScreen() {
+  let mainEle = document.querySelector('main');
   mainEle.innerHTML = addListTemplate;
   let addListButton = document.querySelector('#add-list');
 
@@ -192,6 +229,9 @@ function drawMembersScreen() {
 }
 
 function createMembers() {
+
+  let mainEle = document.querySelector('main');
+
   let membersDiv = document.createElement('div');
   membersDiv.className = 'list-group col-sm-8 members-fix';
   membersDiv.innerHTML = membersTemplateWrapper;
@@ -444,8 +484,12 @@ function addCard(container, task) {
     /*
      running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the      task text to the modal text area.
      */
+    let moveToTitlesInModalContainer = document.getElementById('move-to');
 
     getListsFromData().forEach((list, index) => {
+      let moveToTitlesOptions = document.createElement('option');
+      moveToTitlesOptions.textContent = list.title;
+      moveToTitlesInModalContainer.appendChild(moveToTitlesOptions);
       list.tasks.forEach((task, index) => {
         if (task.id === modal.getAttribute('data-id')) {
           cardText.value = task.text;
@@ -562,54 +606,15 @@ function addCard(container, task) {
   })
 }
 
-// catch all the arrow buttons (divs)
-
-let subMenuButtons = document.querySelectorAll('.dropdown');
-// console.info(subMenuButtons);
-
-// apply event listener to every arrow button
-
-for (const button of subMenuButtons) {
-  // putting display = none on all the button list to initialize it
-  makeButtonSupportRemoveList(button)
-}
-
-// ===============================================
-const membersTemplateWrapper = `
-  <span class="members-header">Taskboard Members</span>
-  <ul class="list-group col-sm-8 members-list">`;
-
-const membersTemplate = `<form class="members-page-form normal-mode">
-        <input type="text" class="form-control edit-input" placeholder="Current">
-      </form>
-      <div class="align-members-buttons">
-        <button type="button"
-                class="btn btn-info btn-sm none-edit">Edit
-        </button>
-        <button type="button" class="btn btn-danger btn-sm none-edit delete-member">Delete</button>
-        <button type="button" class="btn btn-default btn-sm edit-buttons">Cancel</button>
-        <button type="button" class="btn btn-success btn-sm edit-buttons save-data">Save</button>
-      </div>
-    </li>`;
-const membersTemplateAddMember = `<li class="list-group-item">
-      <form class="members-page-form input-members">
-        <input type="text" class="form-control input-fix-members" placeholder="Add new member">
-        <button type="submit" class="btn btn-primary">Add</button>
-      </form>
-    </li>
-  </ul>
-</div>`;
-
-const boardButton = document.querySelector('.board');
-const membersButton = document.querySelector('.members');
-
-const addListTemplate = `<div class="wrapper">
-    <button class="btn add-list-btn" id="add-list"> Add a list...</button>
-  </div>`;
-
-let mainEle = document.querySelector('main');
+/*=====================================================================
+ Initializing app related functions
+ //===================================================================*/
 
 function isTabActive() {
+
+  const boardButton = document.querySelector('.board');
+  const membersButton = document.querySelector('.members');
+
   let hashWindow = window.location.hash;
   if (hashWindow.includes('board')) {
     boardButton.classList.add('active');
@@ -654,7 +659,6 @@ function manageEditMode(currentLi) {
     const editButtonMembersSaveData = currentLi.querySelector('.align-members-buttons button.save-data');
 
     const editButtonMemberDelete = currentLi.querySelector('.align-members-buttons .delete-member');
-    console.info(editButtonMemberDelete);
 
     editButtonMembers.addEventListener('click', (e) => {
       let target = e.target;
@@ -694,7 +698,9 @@ window.addEventListener('hashchange', (event) => {
 // if so, load from appData and call intialByHash function
 // if not, load the JSONS as usual
 
-// localStorage.setItem('appData', JSON.stringify(appData)
+/*=====================================================================
+ Local storage
+ //===================================================================*/
 
 if (window.localStorage.length !== 0) {
   pullFromStorage();
