@@ -4,11 +4,19 @@
 
 const MODEL = (function () {
 
+  /**
+   * Private
+   * @type {{lists: Array, members: Array}}
+   */
+
   let appData = {
     lists: [],
     members: []
   };
 
+  /**
+   * Public
+   */
   function saveToStorage() {
     localStorage.setItem('appData', JSON.stringify(appData));
   }
@@ -103,19 +111,18 @@ const MODEL = (function () {
     return emptyCard;
   }
 
-
   return {
-    saveToStorage: saveToStorage,
-    pullFromStorage: pullFromStorage,
-    isAllDataReady: isAllDataReady,
-    getListsFromData: getListsFromData,
-    getMembersFromData: getMembersFromData,
-    updateDataBoard: updateDataBoard,
-    updateDataMembers: updateDataMembers,
-    updateDataWithEmptyList: updateDataWithEmptyList,
-    addMemberData: addMemberData,
-    removeMemberData: removeMemberData,
-    addEmptyCardToData: addEmptyCardToData
+    saveToStorage,
+    pullFromStorage,
+    isAllDataReady,
+    getListsFromData,
+    getMembersFromData,
+    updateDataBoard,
+    updateDataMembers,
+    updateDataWithEmptyList,
+    addMemberData,
+    removeMemberData,
+    addEmptyCardToData
   };
 
 })();

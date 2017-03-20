@@ -9,7 +9,7 @@
 const VIEW = (function () {
   /*=====================================================================
    Templates
-   //===================================================================*/
+  //===================================================================*/
 
   const membersTemplateWrapper = `
   <span class="members-header">Taskboard Members</span>
@@ -41,7 +41,7 @@ const VIEW = (function () {
 
   /*=====================================================================
    Feature related functions
-   //===================================================================*/
+  //===================================================================*/
 
   function newCardClickHandler(event) {
     const target = event.target;
@@ -109,7 +109,13 @@ const VIEW = (function () {
 
         if (e.keyCode === ENTER) {
           const currentList = MODEL.getListsFromData().find((list) => titleSpanContent === list.title);
+
+          // updating the appData list titles
+
           currentList.title = input.value;
+
+          // saving the titles to local storage
+          MODEL.saveToStorage();
           e.target.blur();
         }
       });
@@ -387,7 +393,11 @@ const VIEW = (function () {
 
       const currentMember = MODEL.getMembersFromData().find(memberObject => memberObject.id === memberIdInTasksInAppData);
 
+      //updating appData
       let memberNameIdLinked = currentMember.name;
+
+      //updating local storage with the appData
+      MODEL.saveToStorage();
 
       let teamatesInitialsSpan = document.createElement('span');
       teamatesInitialsSpan.className = 'label label-primary initials';
@@ -718,8 +728,8 @@ const VIEW = (function () {
 
   /*=====================================================================
    Local storage
-   //===================================================================*/
-  
+  //===================================================================*/
+
   if (localStorage.getItem('appData')) {
     MODEL.pullFromStorage();
     intialListByHashtag();
