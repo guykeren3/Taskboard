@@ -9,7 +9,7 @@
 const VIEW = (function () {
   /*=====================================================================
    Templates
-  //===================================================================*/
+   //===================================================================*/
 
   const membersTemplateWrapper = `
   <span class="members-header">Taskboard Members</span>
@@ -41,7 +41,7 @@ const VIEW = (function () {
 
   /*=====================================================================
    Feature related functions
-  //===================================================================*/
+   //===================================================================*/
 
   function newCardClickHandler(event) {
     const target = event.target;
@@ -377,6 +377,8 @@ const VIEW = (function () {
   }
 
   function addCard(container, task) {
+    let listTheCardIsIn = MODEL.getListOfTask(task);
+    console.info(listTheCardIsIn);
     let newLi = document.createElement('li');
     newLi.className = 'panel-body';
 
@@ -453,6 +455,14 @@ const VIEW = (function () {
       //find the task
       let currentTask = {};
 
+      // fetching the select element from the HTML to later push the options of the move to titles.
+
+      let moveToTitlesInModalContainer = document.getElementById('move-to');
+
+      /* emptying the select each time edit button is clicked on the modal because if not, each time the we will click the same lists will be added to the move to. */
+
+      moveToTitlesInModalContainer.innerHTML = '';
+
       MODEL.getListsFromData().forEach((list, indexOfList) => {
         for (let task of list.tasks) {
           if (task.id === modal.getAttribute('data-id')) {
@@ -494,28 +504,41 @@ const VIEW = (function () {
       //catching the text area in the modal
       let cardText = document.getElementById('card-text');
 
+      // catching the title of the list of the edit button card that was clicked
+      let divParentOfLi = liParentOfEdit.closest('.panel-default');
+      let titleOfListContainer = divParentOfLi.querySelector('.panel-heading');
+      let listTitle = titleOfListContainer.querySelector('span.list-title');
+
       // catching the titles select container
-
-      let moveToTitlesInModalContainer = document.getElementById('move-to');
-
-      /* emptying the select each time edit button is clicked on the modal because if not, each time the we will click the same lists will be added to the move to. */
-
-      moveToTitlesInModalContainer.innerHTML = '';
 
       MODEL.getListsFromData().forEach((list, index) => {
         let moveToTitlesOptions = document.createElement('option');
-        moveToTitlesOptions.textContent = list.title;
+        moveToTitlesOptions.innerHTML = list.title;
+        moveToTitlesOptions.setAttribute('data-id', divParentOfLi.getAttribute('data-id'));
+        moveToTitlesOptions.setAttribute('selected', '');
+        if (list.id === listTheCardIsIn.id) {
+          moveToTitlesOptions.setAttribute('selected', true);
+        }
+
         /*
          running over the lists in order to run over each list task and            comparing the task id inside to the modal id, if same - entering the task text to the modal text area.
          */
+
         list.tasks.forEach((task, index) => {
           if (task.id === modal.getAttribute('data-id')) {
             cardText.value = task.text;
           }
         });
-        // pushing the titles options to the select container
+
+        // pushing the titles options to the select container at the end of the loops
+
         moveToTitlesInModalContainer.appendChild(moveToTitlesOptions);
       });
+      // for (let option of moveToTitlesInModalContainer) {
+      //   if (divParentOfLi.getAttribute('data-id') === option.getAttribute('data-id')) {
+      //     option.selected = true;
+      //   }
+      // }
 
       //catching the save btn and when clicking updating the card text.
 
@@ -728,7 +751,7 @@ const VIEW = (function () {
 
   /*=====================================================================
    Local storage
-  //===================================================================*/
+   //===================================================================*/
 
   if (localStorage.getItem('appData')) {
     MODEL.pullFromStorage();

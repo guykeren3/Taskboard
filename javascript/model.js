@@ -23,7 +23,6 @@ const MODEL = (function () {
 
   function pullFromStorage() {
     appData = JSON.parse(localStorage.getItem('appData'));
-    return appData;
   }
 
   function isAllDataReady() {
@@ -93,6 +92,18 @@ const MODEL = (function () {
     saveToStorage();
   }
 
+  function getListOfTask(task) {
+    getListsFromData().forEach((list, indexOfList) => {
+      let result = list;
+      list.tasks.forEach((taskInList, indexOfTaskInList) => {
+        if (taskInList.id === task.id) {
+          result = taskInList;
+        }
+      })
+    });
+    return result
+  }
+
   function addEmptyCardToData(lists, title) {
     // running find on the appData to compare between my title and the appData title and then pushing the card into the correct list in appData.
 
@@ -122,7 +133,8 @@ const MODEL = (function () {
     updateDataWithEmptyList,
     addMemberData,
     removeMemberData,
-    addEmptyCardToData
+    addEmptyCardToData,
+    getListOfTask
   };
 
 })();
