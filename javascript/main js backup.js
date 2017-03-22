@@ -7,7 +7,6 @@
  */
 
 const VIEW = (function () {
-
   /*=====================================================================
    Templates
    //===================================================================*/
@@ -153,7 +152,6 @@ const VIEW = (function () {
       if (result === true) {
 
         //remove the list if user clicked yes ( true )
-
         divPanelPanelDefault.parentNode.removeChild(divPanelPanelDefault);
 
         let liTitle = headerSpanText;
@@ -356,6 +354,7 @@ const VIEW = (function () {
     // Handle clicks on Add Card
     let cardButton = listParent.querySelector('.add-card-button');
     cardButton.addEventListener('click', newCardClickHandler);
+    // console.log(cardButton);
   }
 
   function getListTemplate(listNum) {
@@ -730,11 +729,9 @@ const VIEW = (function () {
         });
       });
       // Add listeners to delete button
-
-        $(document).ready(function () {
-          $(editButtonMemberDelete).click(function () {
-            $(currentLi).fadeOut();
-          });
+      editButtonMemberDelete.addEventListener('click', (e) => {
+        // Remove the member from the UI
+        currentLi.remove();
 
         // Remove the member from appData
         MODEL.removeMemberData(currentLi)
@@ -768,3 +765,4 @@ const VIEW = (function () {
   }
 
 })();
+
