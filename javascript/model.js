@@ -93,15 +93,15 @@ const MODEL = (function () {
   }
 
   function getListOfTask(task) {
-    getListsFromData().forEach((list, indexOfList) => {
-      let result = list;
-      list.tasks.forEach((taskInList, indexOfTaskInList) => {
+    let result;
+    getListsFromData().forEach((list) => {
+      list.tasks.forEach((taskInList) => {
         if (taskInList.id === task.id) {
           result = taskInList;
         }
       })
     });
-    return result
+    return result;
   }
 
   function addEmptyCardToData(lists, title) {
