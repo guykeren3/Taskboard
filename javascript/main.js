@@ -23,7 +23,7 @@ const VIEW = (function () {
                 class="btn btn-info btn-sm none-edit">Edit
         </button>
         <button type="button" class="btn btn-danger btn-sm none-edit delete-member">Delete</button>
-        <button type="button" class="btn btn-default btn-sm edit-buttons">Cancel</button>
+        <button type="button" class="btn btn-default btn-sm edit-buttons cancel-data">Cancel</button>
         <button type="button" class="btn btn-success btn-sm edit-buttons save-data">Save</button>
       </div>
     </li>`;
@@ -264,6 +264,7 @@ const VIEW = (function () {
     // adding listener on addMemberButton to add members to appData
     let form = addMemberButton.closest('form.input-members');
     let inputMember = form.querySelector('input.input-fix-members');
+    inputMember.required = true;
 
     addMemberForm.addEventListener('submit', (e) => {
       //creating new member
@@ -272,6 +273,9 @@ const VIEW = (function () {
         name: inputMember.value //brings the input value into name
       };
 
+      if(newMember.name === "") {
+        alert("Error: Input is empty!");
+      }
       e.preventDefault();
 
       //reseting the input value after adding a new member
@@ -310,12 +314,20 @@ const VIEW = (function () {
   }
 
   function createList(list) {
-    // console.info('createList', data);
+    // console.info('createList', list);
     let addListButton = document.querySelector('#add-list');
 //catching the main div to push the other divs into it
     const listParent = document.createElement('div');
     listParent.className = 'panel panel-default';
-    listParent.setAttribute('data-id', uuid());
+
+    // if the list from JSON has id, will enter the attribute, if not will create random id
+
+    if (typeof list !== 'undefined') {
+      listParent.setAttribute('data-id', list.id);
+    }
+    else {
+      listParent.setAttribute('data-id', uuid());
+    }
     listParent.innerHTML = getListTemplate(MODEL.getListsFromData().length);
     // console.info(data);
     let divWrapper = document.querySelector('.wrapper');
@@ -378,7 +390,8 @@ const VIEW = (function () {
 
   function addCard(container, task) {
     let listTheCardIsIn = MODEL.getListOfTask(task);
-    console.info(listTheCardIsIn);
+    // console.info(listTheCardIsIn);
+
     let newLi = document.createElement('li');
     newLi.className = 'panel-body';
 
@@ -512,12 +525,19 @@ const VIEW = (function () {
       // catching the titles select container
 
       MODEL.getListsFromData().forEach((list, index) => {
+        // console.info(list);
         let moveToTitlesOptions = document.createElement('option');
         moveToTitlesOptions.innerHTML = list.title;
-        moveToTitlesOptions.setAttribute('data-id', divParentOfLi.getAttribute('data-id'));
-        moveToTitlesOptions.setAttribute('selected', '');
+        moveToTitlesOptions.setAttribute('data-id', list.id);
+
         if (list.id === listTheCardIsIn.id) {
-          moveToTitlesOptions.setAttribute('selected', true);
+          if (moveToTitlesOptions.textContent === listTheCardIsIn.title) {
+            /*
+             when creating the moteToTitleOption, checks if the list id is the same as the list the card is in, if so created an attribute "selected for that option
+             */
+
+            moveToTitlesOptions.setAttribute('selected', '');
+          }
         }
 
         /*
@@ -572,6 +592,40 @@ const VIEW = (function () {
               });
             }
           });
+        });
+
+        // will check what option is selected
+        // console.info(moveToTitlesInModalContainer);
+        let moveToOptions = moveToTitlesInModalContainer.querySelectorAll('option');
+        // console.info(moveToOptions);
+        moveToOptions.forEach((option) => {
+          // console.info(option);
+          if (option.selected === true) {
+            // console.info('Yaurikaa', option);
+            let selectedOptionId = option.getAttribute('data-id');
+            // console.info(selectedOptionId);
+
+            // gets the list of the option by id
+
+            let theListToTransferTheCard = MODEL.getListById(selectedOptionId);
+
+            //removing the task from the appData
+            MODEL.getListsFromData().forEach((list, index) => {
+              list.tasks.forEach((task, indexOfTask) => {
+                if (MODEL.getListOfTask(task) !== theListToTransferTheCard) {
+                  if (task.id === modal.getAttribute('data-id')) {
+                    let currentTask = task.id;
+
+                    // saving the task to transfer to the other list that has been chosen
+                    theListToTransferTheCard.tasks.push(task);
+
+                    list.tasks.splice(indexOfTask, 1);
+                    // console.info(option.getAttribute('data-id'), list.id);
+                  }
+                }
+              });
+            });
+          }
         });
 
         //working on replacing the checked names in the cards
@@ -706,7 +760,32 @@ const VIEW = (function () {
 
       const editButtonMemberDelete = currentLi.querySelector('.align-members-buttons .delete-member');
 
+      const editButtonMemberCancel = currentLi.querySelector('.align-members-buttons .cancel-data');
+
       editButtonMembers.addEventListener('click', (e) => {
+        let target = e.target;
+        let spanInLi = currentLi.querySelector('.reset-span');
+        let inputMembers = currentLi.querySelector('input');
+        inputMembers.value = spanInLi.textContent;
+        currentLi.classList.toggle('edit-mode');
+        // trying to switch the span with the input when clicking save
+        editButtonMembersSaveData.addEventListener('click', (e) => {
+          // updating the UI
+          spanInLi.textContent = inputMembers.value;
+
+          // updating the appData
+          for (let member of MODEL.getMembersFromData()) {
+            if (member.id === currentLi.getAttribute('data-member-id')) {
+              member.name = spanInLi.textContent;
+              // saving the appData again after name change in data.
+              MODEL.saveToStorage();
+            }
+            currentLi.classList.remove('edit-mode');
+          }
+        });
+      });
+
+      editButtonMemberCancel.addEventListener('click', (e) => {
         let target = e.target;
         let spanInLi = currentLi.querySelector('.reset-span');
         let inputMembers = currentLi.querySelector('input');

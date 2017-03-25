@@ -58,6 +58,7 @@ const MODEL = (function () {
     saveToStorage();
 
     const newList = {
+      id: uuid(),
       title: `New List ${listAmount}`,
       tasks: []
     };
@@ -97,11 +98,17 @@ const MODEL = (function () {
     getListsFromData().forEach((list) => {
       list.tasks.forEach((taskInList) => {
         if (taskInList.id === task.id) {
-          result = taskInList;
+          result = list;
         }
       })
     });
     return result;
+  }
+
+  // giving an id finds the list and returns it
+
+  function getListById(id) {
+    return getListsFromData().find((list) => list.id === id);
   }
 
   function addEmptyCardToData(lists, title) {
@@ -134,7 +141,8 @@ const MODEL = (function () {
     addMemberData,
     removeMemberData,
     addEmptyCardToData,
-    getListOfTask
+    getListOfTask,
+    getListById
   };
 
 })();
