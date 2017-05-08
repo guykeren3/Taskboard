@@ -6,6 +6,8 @@ Trello like task manager single page application,
 built with vanilla javascript, bootstrap and custom CSS.
 The app uses local storage for saving the tasks.
 
+https://guykeren3.github.io/Taskboard/
+
 Challenges
 ===========
 
