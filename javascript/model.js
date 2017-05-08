@@ -1,7 +1,3 @@
-/**
- * Created by Guy on 19/03/2017.
- */
-
 const MODEL = (function () {
 
   /**
@@ -30,9 +26,11 @@ const MODEL = (function () {
       saveToStorage();
       return true;
     }
+
     else {
       return false;
     }
+
   }
 
   function getListsFromData() {
@@ -55,6 +53,7 @@ const MODEL = (function () {
 
   function updateDataWithEmptyList() {
     let listAmount = appData.lists.length;
+
     saveToStorage();
 
     const newList = {
@@ -62,7 +61,9 @@ const MODEL = (function () {
       title: `New List ${listAmount}`,
       tasks: []
     };
+
     appData.lists.push(newList);
+
     saveToStorage();
   }
 
@@ -72,21 +73,31 @@ const MODEL = (function () {
   }
 
   function removeMemberData(li) {
-    //finding the id in members and comparing to the li with the same id to remove when clicking delete.
+
+    // finding the id in members and comparing to the li with the same id to remove when clicking delete.
     appData.members.forEach((member, index) => {
+
       if (member.id === li.getAttribute('data-member-id')) {
+
         let memberToRemove = member.id; //saving the id we are removing for later use to remove it from the tasks in lists as well
+
         appData.members.splice(index, 1);
         // finding the id we removed and comparing to the ids in the task, if same remove that id from the task itself with the index and splice
 
         appData.lists.forEach((list, indexOfList) => {
+
           list.tasks.forEach((task, indexOfTask) => {
+
             task.members.forEach((id, indexOfId) => {
+
               if (id === memberToRemove) {
                 task.members.splice(indexOfId, 1);
               }
+
             })
+
           })
+
         })
       }
     });
@@ -94,18 +105,24 @@ const MODEL = (function () {
   }
 
   function getListOfTask(task) {
+
     let result;
+
     getListsFromData().forEach((list) => {
+
       list.tasks.forEach((taskInList) => {
+
         if (taskInList.id === task.id) {
           result = list;
         }
-      })
-    });
-    return result;
-  }
 
-  // giving an id finds the list and returns it
+      })
+
+    });
+
+    return result;
+
+  }
 
   function getListById(id) {
     return getListsFromData().find((list) => list.id === id);
