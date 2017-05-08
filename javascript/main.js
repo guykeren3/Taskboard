@@ -87,9 +87,7 @@ const VIEW = (function () {
 
     let divWrapper = document.querySelector('.wrapper');
 
-    if (typeof addListButton !== "null") {
     divWrapper.insertBefore(listParent, addListButton);
-    }
 
     // Handle clicks on list title
     let newListSpan = listParent.querySelector('.list-title');
