@@ -69,7 +69,6 @@ const VIEW = (function () {
   }
 
   function createList(list) {
-    // console.info('createList', list);
     let addListButton = document.querySelector('#add-list');
 //catching the main div to push the other divs into it
     const listParent = document.createElement('div');
@@ -87,9 +86,7 @@ const VIEW = (function () {
 
     let divWrapper = document.querySelector('.wrapper');
 
-    if (typeof addListButton !== 'null') {
-    divWrapper.insertBefore(listParent, addListButton);
-    }
+    // divWrapper.insertBefore(listParent, addListButton);
 
     // Handle clicks on list title
     let newListSpan = listParent.querySelector('.list-title');
