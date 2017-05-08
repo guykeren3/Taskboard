@@ -87,7 +87,7 @@ const VIEW = (function () {
 
     let divWrapper = document.querySelector('.wrapper');
 
-    if (typeof addListButton !== "null") {
+    if (typeof addListButton !== 'null') {
     divWrapper.insertBefore(listParent, addListButton);
     }
 
