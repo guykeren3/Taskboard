@@ -35,8 +35,7 @@ const VIEW = (function () {
     </li>
   </ul>
 </div>`;
-
-  const addListTemplate = `<div class="add-list-wrapper">
+  const addListTemplate = `<div class="wrapper">
     <button class="btn add-list-btn" id="add-list"> Add a list...</button>
   </div>`;
 
@@ -44,89 +43,22 @@ const VIEW = (function () {
    Feature related functions
    //===================================================================*/
 
-
-  /*=====================================================================
-   List in Board section
-   //===================================================================*/
-
-  function getListTemplate(listNum) {
-    return `
-  <div class="panel-heading"> <span class="list-title">New List ${listNum}</span> </div>
-  <div class="dropdown-arrow">
-    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          <span class="caret"></span>
-        </button>
-    <ul class="dropdown-menu">
-      <li><a href="#">Delete List</a></li>
-    </ul>
-  </div>
-  <div class="panel-body">
-  <ul class="list-container">
-  </ul>
-  </div>
-  <div class="panel-footer"><button class="add-card-button">Add a card</button></div>
-`;
-  }
-
-  function createList(list) {
-    // console.info('createList', list);
-    let addListButton = document.querySelector('#add-list');
-//catching the main div to push the other divs into it
-    const listParent = document.createElement('div');
-    listParent.className = 'panel panel-default';
-
-    // if the list from JSON has id, will enter the attribute, if not will create random id
-
-    if (typeof list !== 'undefined') {
-      listParent.setAttribute('data-id', list.id);
-    }
-    else {
-      listParent.setAttribute('data-id', uuid());
-    }
-    listParent.innerHTML = getListTemplate(MODEL.getListsFromData().length);
-
-    let divWrapper = document.querySelector('.wrapper');
-
-    divWrapper.insertBefore(listParent, addListButton);
-
-    // Handle clicks on list title
-    let newListSpan = listParent.querySelector('.list-title');
-
-    // gets the tasks text
-    if (typeof list !== 'undefined') {
-      let liName = list.title;
-      newListSpan.textContent = liName; // enteres the object title as the list title
-      let liTasksArray = list.tasks;
-
-      for (const cardData of liTasksArray) {
-        let ulInList = listParent.querySelector('.list-container');
-
-        addCard(ulInList, cardData);
-      }
-    }
-
-    handleListTitle(newListSpan);
-
-    // Handle list options button
-    let listOptions = listParent.querySelector('.dropdown');
-    makeButtonSupportRemoveList(listOptions);
-
-    // Handle clicks on Add Card
-    let cardButton = listParent.querySelector('.add-card-button');
-    cardButton.addEventListener('click', newCardClickHandler);
-  }
-
   function newCardClickHandler(event) {
     const target = event.target;
+    // console.info(target);
+    let divFooter = target.parentNode;
+    // console.log(divFooter);
+    let divParent = divFooter.parentNode;
+    // console.log(divParent);
+    let divUl = divParent.querySelector('.list-container');
+    // console.log(divUl);
 
-    let listWrapper = target.closest('div.panel.panel-default');
-    let listContainer = listWrapper.querySelector('.list-container');
-
-    // Finding the title of the current list i have clicked add button
-    let liTitle = listWrapper.querySelector('span.list-title').textContent;
+    // finding the title of the current list i clicked add button
+    let divParentOfLi = target.closest('.panel.panel-default');
+    let liTitle = divParentOfLi.querySelector('span.list-title').textContent;
 
     const emptyCard = MODEL.addEmptyCardToData(MODEL.getListsFromData(), liTitle);
-    addCard(listContainer, emptyCard);
+    addCard(divUl, emptyCard);
   }
 
 // event listeners on title function
@@ -157,7 +89,6 @@ const VIEW = (function () {
           // Show the e again
           span.style.display = "";
         }
-
         else {
           input.parentNode.removeChild(input);
           span.style.display = "";
@@ -175,6 +106,7 @@ const VIEW = (function () {
         let inputParent = input.closest('.panel-heading');
         let titleSpanContent = inputParent.querySelector('span.list-title').textContent;
 
+
         if (e.keyCode === ENTER) {
           const currentList = MODEL.getListsFromData().find((list) => titleSpanContent === list.title);
 
@@ -183,7 +115,6 @@ const VIEW = (function () {
           currentList.title = input.value;
 
           // saving the titles to local storage
-
           MODEL.saveToStorage();
           e.target.blur();
         }
@@ -328,13 +259,10 @@ const VIEW = (function () {
     }
 
     let addMemberForm = createMembersDivContainer.querySelector('form.input-members');
-
+    //need to work on event listener here for the input members
     let addMemberButton = createMembersDivContainer.querySelector('.members-page-form button');
-
     // adding listener on addMemberButton to add members to appData
-
     let form = addMemberButton.closest('form.input-members');
-
     let inputMember = form.querySelector('input.input-fix-members');
     inputMember.required = true;
 
@@ -345,7 +273,7 @@ const VIEW = (function () {
         name: inputMember.value //brings the input value into name
       };
 
-      if (newMember.name === "") {
+      if(newMember.name === "") {
         alert("Error: Input is empty!");
       }
       e.preventDefault();
@@ -381,11 +309,88 @@ const VIEW = (function () {
     listParent.appendChild(membersLi);
     listParent.insertBefore(membersLi, inputLiContainer);
 
+    //giving the editMode function the membersLi as an argument to work only on him (the membersLi is created each time from line 209)
     manageEditMode(membersLi);
+  }
+
+  function createList(list) {
+    // console.info('createList', list);
+    let addListButton = document.querySelector('#add-list');
+//catching the main div to push the other divs into it
+    const listParent = document.createElement('div');
+    listParent.className = 'panel panel-default';
+
+    // if the list from JSON has id, will enter the attribute, if not will create random id
+
+    if (typeof list !== 'undefined') {
+      listParent.setAttribute('data-id', list.id);
+    }
+    else {
+      listParent.setAttribute('data-id', uuid());
+    }
+    listParent.innerHTML = getListTemplate(MODEL.getListsFromData().length);
+    // console.info(data);
+    let divWrapper = document.querySelector('.wrapper');
+
+// parentNode.insertBefore(newNode, referenceNode) example for how to use insertBefore node that been used below;
+
+    divWrapper.insertBefore(listParent, addListButton);
+
+    // Handle clicks on list title
+    let newListSpan = listParent.querySelector('.list-title');
+// console.info(newListSpan);
+
+    // gets the tasks text
+    if (typeof list !== 'undefined') {
+      let liName = list.title;
+      newListSpan.textContent = liName;   // enteres the object title as the list title
+      let liTasksArray = list.tasks;
+      // console.info('this is the tasks array', liTasksArray);
+      for (const i in liTasksArray) {
+        let cardData = liTasksArray[i];
+        // console.info(textInListArray);
+        let ulInList = listParent.querySelector('.list-container');
+
+        addCard(ulInList, cardData);
+      }
+    }
+
+    // console.info(newListSpan);
+    handleListTitle(newListSpan);
+
+
+    // Handle list options button
+    let listOptions = listParent.querySelector('.dropdown');
+    makeButtonSupportRemoveList(listOptions);
+
+    // Handle clicks on Add Card
+    let cardButton = listParent.querySelector('.add-card-button');
+    cardButton.addEventListener('click', newCardClickHandler);
+    // console.log(cardButton);
+  }
+
+  function getListTemplate(listNum) {
+    return `
+  <div class="panel-heading"> <span class="list-title">New List ${listNum}</span> </div>
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <span class="caret"></span>
+        </button>
+    <ul class="dropdown-menu">
+      <li><a href="#">Delete List</a></li>
+    </ul>
+  </div>
+  <div class="panel-body">
+  <ul class="list-container">
+  </ul>
+  </div>
+  <div class="panel-footer"><button class="add-card-button">Add a card</button></div>
+`;
   }
 
   function addCard(container, task) {
     let listTheCardIsIn = MODEL.getListOfTask(task);
+    // console.info(listTheCardIsIn);
 
     let newLi = document.createElement('li');
     newLi.className = 'panel-body';
@@ -435,6 +440,7 @@ const VIEW = (function () {
     btnEdit.textContent = 'Edit card';
 
     newLi.appendChild(btnEdit);
+    // console.log(newLi);
     container.appendChild(newLi);
 
     btnEdit.addEventListener('click', (e) => {
@@ -446,11 +452,16 @@ const VIEW = (function () {
       //getting the id attribute from the li of the edit card button
       let liParentOfEditId = liParentOfEdit.getAttribute('data-id');
 
+
       const modal = document.querySelector('.wrapper-edit');
 
       //adding the li id of the editBtn we clicked to the modal to connect the two
       modal.setAttribute('data-id', liParentOfEditId);
 
+      // working on modal checkboxes to be dynamic js and not hard coded:
+      // catching the div that wraps the checkboxes
+      // creating div's for each member in a loop
+      // creating input and label for every member and pushing into the div
       const checkBoxContainer = document.getElementById('members');
       checkBoxContainer.innerHTML = '';
 
@@ -514,20 +525,17 @@ const VIEW = (function () {
       // catching the titles select container
 
       MODEL.getListsFromData().forEach((list, index) => {
-
+        // console.info(list);
         let moveToTitlesOptions = document.createElement('option');
-
         moveToTitlesOptions.innerHTML = list.title;
         moveToTitlesOptions.setAttribute('data-id', list.id);
 
         if (list.id === listTheCardIsIn.id) {
-          if (moveToTitlesOptions.textContent === listTheCardIsIn.title)
+          if (moveToTitlesOptions.textContent === listTheCardIsIn.title) {
+            /*
+             when creating the moteToTitleOption, checks if the list id is the same as the list the card is in, if so created an attribute "selected for that option
+             */
 
-          /*
-           when creating the moteToTitleOption, checks if the list id is the same as the list the card is in, if so created an attribute "selected for that option
-           */
-
-          {
             moveToTitlesOptions.setAttribute('selected', '');
           }
         }
@@ -546,11 +554,15 @@ const VIEW = (function () {
 
         moveToTitlesInModalContainer.appendChild(moveToTitlesOptions);
       });
+      // for (let option of moveToTitlesInModalContainer) {
+      //   if (divParentOfLi.getAttribute('data-id') === option.getAttribute('data-id')) {
+      //     option.selected = true;
+      //   }
+      // }
 
       //catching the save btn and when clicking updating the card text.
 
       let saveModalBtn = document.querySelector('.btn-save-modal');
-
       //getting an array of the spans
       let spanInCard = document.querySelectorAll('span.card-text');
 
@@ -558,26 +570,20 @@ const VIEW = (function () {
 
       saveModalBtn.addEventListener('click', (e) => {
         //running over the lists and catching the list
-
         MODEL.getListsFromData().forEach((list, index) => {
           //running over the lists tasks
-
           list.tasks.forEach((task, index) => {
             //comparing task id with modal id, if same update
-
             if (task.id === modal.getAttribute('data-id')) {
-
               //updating the card itself in appData with the modal changes
               task.text = cardText.value;
 
               MODEL.saveToStorage();
 
               //running over the spans and comparing the id to the modal if same updating the ui of the span.
-
               spanInCard.forEach((span, index) => {
                 //getting the li of each span because the id is on him
                 let liParentOfSpan = span.closest('li');
-
                 //comparing the li id to tht modal id, if same update.
                 if (liParentOfSpan.getAttribute('data-id') === modal.getAttribute('data-id')) {
                   //updating the ui span with the task from the modal.
@@ -589,11 +595,15 @@ const VIEW = (function () {
         });
 
         // will check what option is selected
-
+        // console.info(moveToTitlesInModalContainer);
         let moveToOptions = moveToTitlesInModalContainer.querySelectorAll('option');
+        // console.info(moveToOptions);
         moveToOptions.forEach((option) => {
+          // console.info(option);
           if (option.selected === true) {
+            // console.info('Yaurikaa', option);
             let selectedOptionId = option.getAttribute('data-id');
+            // console.info(selectedOptionId);
 
             // gets the list of the option by id
 
@@ -607,10 +617,10 @@ const VIEW = (function () {
                     let currentTask = task.id;
 
                     // saving the task to transfer to the other list that has been chosen
-
                     theListToTransferTheCard.tasks.push(task);
 
                     list.tasks.splice(indexOfTask, 1);
+                    // console.info(option.getAttribute('data-id'), list.id);
                   }
                 }
               });
@@ -618,8 +628,8 @@ const VIEW = (function () {
           }
         });
 
-
         //working on replacing the checked names in the cards
+
         //getting the id's of the inputs that are checked and pushing to a new array
 
         MODEL.getListsFromData().forEach((list, indexOfList) => {
@@ -697,7 +707,6 @@ const VIEW = (function () {
   }
 
   /*=====================================================================
-
    Initializing app related functions
    //===================================================================*/
 
@@ -743,6 +752,8 @@ const VIEW = (function () {
 
     if (typeof currentLi !== 'undefined') {
 
+      /*before fixing the function (had a bug) caught all the buttons and did loops on them and added event listneres on each. now improved the function by giving it the li that holds all the buttons as an argument, the li is given by an earlier function that creates each list according to the appData. */
+
       const editButtonMembers = currentLi.querySelector('.align-members-buttons button:not(.save-data)');
 
       const editButtonMembersSaveData = currentLi.querySelector('.align-members-buttons button.save-data');
@@ -757,12 +768,9 @@ const VIEW = (function () {
         let inputMembers = currentLi.querySelector('input');
         inputMembers.value = spanInLi.textContent;
         currentLi.classList.toggle('edit-mode');
-
-        // switch the span with the input when clicking save
-
+        // trying to switch the span with the input when clicking save
         editButtonMembersSaveData.addEventListener('click', (e) => {
           // updating the UI
-
           spanInLi.textContent = inputMembers.value;
 
           // updating the appData
@@ -778,12 +786,13 @@ const VIEW = (function () {
       });
 
       editButtonMemberCancel.addEventListener('click', (e) => {
+        let target = e.target;
         let spanInLi = currentLi.querySelector('.reset-span');
         let inputMembers = currentLi.querySelector('input');
+        inputMembers.value = spanInLi.textContent;
         currentLi.classList.toggle('edit-mode');
-        // switch the span with the input when clicking save
+        // trying to switch the span with the input when clicking save
         editButtonMembersSaveData.addEventListener('click', (e) => {
-
           // updating the UI
           spanInLi.textContent = inputMembers.value;
 
@@ -798,10 +807,8 @@ const VIEW = (function () {
           }
         });
       });
-
       // Add listeners to delete button
       editButtonMemberDelete.addEventListener('click', (e) => {
-
         // Remove the member from the UI
         currentLi.remove();
 
@@ -822,7 +829,6 @@ const VIEW = (function () {
 // if not, load the JSONS as usual
 
   /*=====================================================================
-
    Local storage
    //===================================================================*/
 
