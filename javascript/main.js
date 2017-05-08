@@ -82,16 +82,11 @@ const VIEW = (function () {
     else {
       listParent.setAttribute('data-id', uuid());
     }
-
     listParent.innerHTML = getListTemplate(MODEL.getListsFromData().length);
 
-    let divWrapper = document.querySelector('.wrapper-edit');
+    let divWrapper = document.querySelector('.wrapper');
 
-    let addListButtonWrapper = document.querySelector('.add-list-parent')
-
-    divWrapper.appendChild(listParent);
-
-    divWrapper.insertBefore(listParent, addListButtonWrapper);
+    // divWrapper.insertBefore(listParent, addListButton);
 
     // Handle clicks on list title
     let newListSpan = listParent.querySelector('.list-title');
@@ -197,9 +192,7 @@ const VIEW = (function () {
 
   function makeButtonSupportRemoveList(button) {
 
-    let ulInsideButton = document.querySelector('.dropdown-menu');
-
-    console.info('here', ulInsideButton);
+    let ulInsideButton = button.querySelector('.dropdown-menu');
 
     ulInsideButton.style.display = 'none';
 
