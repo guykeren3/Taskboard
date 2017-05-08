@@ -132,7 +132,7 @@ const MODEL = (function () {
     // running find on the appData to compare between my title and the appData title and then pushing the card into the correct list in appData.
 
     const currentList = lists.find((list) => title === list.title);
-    console.info(currentList);
+
     const emptyCard = {
       members: [],
       text: 'Add new task',
