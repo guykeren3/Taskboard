@@ -1,8 +1,7 @@
 Taskboard - Raw JS Web App Project
-This project is part of the Front-End Development Bootcamp at Create.
 =================
 
-Trello like task manager single page application,
+Trello-like task manager single page application,
 built with vanilla javascript, bootstrap and custom CSS.
 The app uses local storage for saving the tasks.
 
@@ -18,3 +17,5 @@ Challenges
 * Accessible with the keyboard
 * Initial data retrieved using AJAX - 2 JSON files
 * Saving app changes to the browser localStorage
+
+This project is part of the Front-End Development Bootcamp at Create.
