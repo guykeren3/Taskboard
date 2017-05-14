@@ -49,20 +49,16 @@ const VIEW = (function () {
 
     const target = event.target;
 
-    let divFooter = target.parentNode;
-
-    let divParent = divFooter.parentNode;
-
-    let divUl = divParent.querySelector('.list-container');
-
     // finding the title of the current list the add button was clicked
-    let divParentOfLi = target.closest('.panel.panel-default');
+    let addCardListWrapper = target.closest('.panel.panel-default');
 
-    let liTitle = divParentOfLi.querySelector('span.list-title').textContent;
+    let listContainer = addCardListWrapper.querySelector('.list-container');
+
+    let liTitle = addCardListWrapper.querySelector('span.list-title').textContent;
 
     const emptyCard = MODEL.addEmptyCardToData(MODEL.getListsFromData(), liTitle);
 
-    addCard(divUl, emptyCard);
+    addCard(listContainer, emptyCard);
   }
 
 // event listeners on title function
