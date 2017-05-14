@@ -25,7 +25,7 @@
 <main></main>
 
 <!--Edit task modal-->
-<div class="wrapper-edit" style="display: none">
+<div class="modal-wrapper" style="display: none">
   <div class="modal fade show-edit" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -37,40 +37,45 @@
         <div class="modal-body">
           <form class="form-horizontal">
             <div class="form-group">
-              <label for="card-text" class="col-sm-2 control-label label-adjust">Card text:</label>
+              <label for="card-text" class="col-sm-2 control-label label-adjust-card-text-modal">Card text:</label>
               <div class="col-sm-10">
                 <textarea class="form-control" rows="3" id="card-text"></textarea>
               </div>
             </div>
+
             <div class="form-group">
               <label for="move-to" class="col-sm-2 control-label label-adjust">Move to:</label>
               <div class="col-sm-10">
                 <select class="form-control" id="move-to">
-                  <!--<option>Backlog</option>-->
-                  <!--<option>TODO</option>-->
-                  <!--<option>In Progress</option>-->
-                  <!--<option>Done</option>-->
                 </select>
               </div>
-
             </div>
-            <div class="form-group">
-              <label for="members" class="col-sm-2 control-label">Members:</label>
-              <div class="col-sm-6 adjust-colm-members">
-                <div class="panel panel-default form-panel-adjust">
-                  <div class="panel-body adjust-checkbox" id="members">
 
-                    </div>
+            <div class="form-group">
+
+              <label for="members" class="col-sm-2 control-label">Members:</label>
+              <div class="col-sm-6">
+                <div class="panel panel-default form-panel-adjust-in-modal">
+                  <div class="panel-body adjust-checkbox-in-modal" id="members">
                   </div>
                 </div>
               </div>
+
+            </div>
+
             <button type="button" class="btn btn-danger btn-delete-card">Delete Card</button>
+
           </form>
+
         </div>
+
         <div class="modal-footer">
+
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary btn-save-modal">Save changes</button>
+
         </div>
+
       </div>
     </div>
   </div>

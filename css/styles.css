@@ -129,7 +129,7 @@ body > main > div > div {
   display: none;
 }
 
-.wrapper-edit {
+.modal-wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -154,16 +154,16 @@ h4.modal-title {
   font-weight: bold;
 }
 
-.panel-body.adjust-checkbox {
+.panel-body.adjust-checkbox-in-modal {
   padding-top: 0;
 }
 
-.col-sm-2.control-label.label-adjust {
+.col-sm-2.control-label.label-adjust-card-text-modal {
   padding-left: 5px;
   padding-right: 5px;
 }
 
-.panel.panel-default.form-panel-adjust {
+.panel.panel-default.form-panel-adjust-in-modal {
   margin-left: 0;
   max-height: 100px;
   overflow: auto;

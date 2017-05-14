@@ -16,30 +16,44 @@ const VIEW = (function () {
   <span class="members-header">Taskboard Members</span>
   <ul class="list-group col-sm-8 members-list">`;
 
-  const membersTemplate = `<form class="members-page-form normal-mode">
+  const membersTemplate =
+    `<form class="members-page-form normal-mode">
         <input type="text" class="form-control edit-input" placeholder="Current">
       </form>
+      
       <div class="align-members-buttons">
+    
         <button type="button"
                 class="btn btn-info btn-sm none-edit">Edit
         </button>
+    
         <button type="button" class="btn btn-danger btn-sm none-edit delete-member">Delete</button>
+    
         <button type="button" class="btn btn-default btn-sm edit-buttons cancel-data">Cancel</button>
+    
         <button type="button" class="btn btn-success btn-sm edit-buttons save-data">Save</button>
+    
       </div>
+    
     </li>`;
-  const membersTemplateAddMember = `<li class="list-group-item">
+
+  const membersTemplateAddMember =
+    `<li class="list-group-item">
+    
       <form class="members-page-form input-members">
         <input type="text" class="form-control input-fix-members" placeholder="Add new member">
         <button type="submit" class="btn btn-primary">Add</button>
       </form>
+    
     </li>
   </ul>
+  
 </div>`;
-  const addListTemplate = `<div class="add-list-btn-wrapper">
+
+  const addListTemplate =
+    `<div class="add-list-btn-wrapper">
     <button class="btn add-list-btn" id="add-list"> Add a list...</button>
   </div>`;
-
   /*=====================================================================
 
    Feature related functions
@@ -501,7 +515,7 @@ const VIEW = (function () {
       //getting the id attribute from the li of the edit card button
       let liParentOfEditId = liParentOfEdit.getAttribute('data-id');
 
-      const modal = document.querySelector('.wrapper-edit');
+      const modal = document.querySelector('.modal-wrapper');
 
       //adding the li id of the editBtn we clicked to the modal to connect the two
       modal.setAttribute('data-id', liParentOfEditId);
