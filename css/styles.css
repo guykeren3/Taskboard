@@ -181,7 +181,7 @@ li:hover.panel-body .edit-card {
   font-weight: 600;
 }
 
-.wrapper {
+.add-list-btn-wrapper {
   /*position: relative;*/
   display: -webkit-flex;
   display: inline-flex;

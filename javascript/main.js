@@ -36,7 +36,7 @@ const VIEW = (function () {
     </li>
   </ul>
 </div>`;
-  const addListTemplate = `<div class="wrapper">
+  const addListTemplate = `<div class="add-list-btn-wrapper">
     <button class="btn add-list-btn" id="add-list"> Add a list...</button>
   </div>`;
 
@@ -375,7 +375,7 @@ const VIEW = (function () {
 
     listParent.innerHTML = getListTemplate(MODEL.getListsFromData().length);
 
-    let divWrapper = document.querySelector('.wrapper');
+    let divWrapper = document.querySelector('.add-list-btn-wrapper');
 
     divWrapper.insertBefore(listParent, addListButton);
 
