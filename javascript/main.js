@@ -348,7 +348,7 @@ const VIEW = (function () {
 
     let spanInLiMembers = document.createElement('span');
 
-    spanInLiMembers.className = 'reset-span';
+    spanInLiMembers.className = 'reset-span-members';
     spanInLiMembers.textContent = memberName;
 
     membersLi.appendChild(spanInLiMembers);
@@ -840,10 +840,13 @@ const VIEW = (function () {
 
         let target = e.target;
 
-        let spanInLi = currentLi.querySelector('.reset-span');
+        let nameOfMemberInLiSpan = currentLi.querySelector('.reset-span-members');
 
         let inputMembers = currentLi.querySelector('input');
-        inputMembers.value = spanInLi.textContent;
+
+        inputMembers.value = nameOfMemberInLiSpan.textContent;
+
+        let nameBeforeReset = inputMembers.value;
 
         currentLi.classList.toggle('edit-mode');
 
@@ -851,14 +854,18 @@ const VIEW = (function () {
         editButtonMembersSaveData.addEventListener('click', (e) => {
 
           // updating the UI
-          spanInLi.textContent = inputMembers.value;
+          nameOfMemberInLiSpan.textContent = inputMembers.value;
+
+          if (nameOfMemberInLiSpan.textContent === "") {
+            nameOfMemberInLiSpan.textContent = nameBeforeReset;
+          }
 
           // updating the appData
           for (let member of MODEL.getMembersFromData()) {
 
             if (member.id === currentLi.getAttribute('data-member-id')) {
 
-              member.name = spanInLi.textContent;
+              member.name = nameOfMemberInLiSpan.textContent;
               // saving the appData again after name change in data.
               MODEL.saveToStorage();
 
@@ -875,10 +882,10 @@ const VIEW = (function () {
 
         let target = e.target;
 
-        let spanInLi = currentLi.querySelector('.reset-span');
+        let nameOfMemberInLiSpan = currentLi.querySelector('.reset-span-members');
 
         let inputMembers = currentLi.querySelector('input');
-        inputMembers.value = spanInLi.textContent;
+        inputMembers.value = nameOfMemberInLiSpan.textContent;
 
         currentLi.classList.toggle('edit-mode');
 
@@ -886,13 +893,13 @@ const VIEW = (function () {
         editButtonMembersSaveData.addEventListener('click', (e) => {
 
           // updating the UI
-          spanInLi.textContent = inputMembers.value;
+          nameOfMemberInLiSpan.textContent = inputMembers.value;
 
           // updating the appData
           for (let member of MODEL.getMembersFromData()) {
 
             if (member.id === currentLi.getAttribute('data-member-id')) {
-              member.name = spanInLi.textContent;
+              member.name = nameOfMemberInLiSpan.textContent;
               // saving the appData again after name change in data.
               MODEL.saveToStorage();
 

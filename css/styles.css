@@ -318,14 +318,14 @@ li:hover.panel-body .edit-card {
   display: none;
 }
 
-span.reset-span {
+span.reset-span-members {
   font-size: 1rem;
   font-weight: 400;
   padding: 5px 0;
   display: inline-block;
 }
 
-.edit-mode span.reset-span {
+.edit-mode span.reset-span-members {
   display: none;
 }
 
